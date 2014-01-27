@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D77E32861891C89600A387E4 /* STRUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D77E32851891C89600A387E4 /* STRUtility.m */; };
 		D7A68EF6188FEEB0006C0D8C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF5188FEEB0006C0D8C /* Foundation.framework */; };
 		D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */; };
 		D7A68EFA188FEEB0006C0D8C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF9188FEEB0006C0D8C /* UIKit.framework */; };
@@ -19,6 +20,11 @@
 		D7A68F11188FEEB0006C0D8C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF9188FEEB0006C0D8C /* UIKit.framework */; };
 		D7A68F19188FEEB0006C0D8C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7A68F17188FEEB0006C0D8C /* InfoPlist.strings */; };
 		D7A68F1B188FEEB0006C0D8C /* ShouterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A68F1A188FEEB0006C0D8C /* ShouterTests.m */; };
+		D7A68F27188FEF68006C0D8C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7A68F26188FEF68006C0D8C /* Main.storyboard */; };
+		D7A68F2D18902FAF006C0D8C /* STRShoutListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A68F2C18902FAF006C0D8C /* STRShoutListViewController.m */; };
+		D7A68F3018903905006C0D8C /* STRPostShoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A68F2F18903905006C0D8C /* STRPostShoutViewController.m */; };
+		D7A68F33189080D6006C0D8C /* STRShout.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A68F32189080D6006C0D8C /* STRShout.m */; };
+		D7E464AD18916DE900C19B9D /* STRCommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7E464AC18916DE900C19B9D /* STRCommentViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D77E32841891C89600A387E4 /* STRUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRUtility.h; sourceTree = "<group>"; };
+		D77E32851891C89600A387E4 /* STRUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRUtility.m; sourceTree = "<group>"; };
 		D7A68EF2188FEEB0006C0D8C /* Shouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7A68EF5188FEEB0006C0D8C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -48,6 +56,15 @@
 		D7A68F16188FEEB0006C0D8C /* ShouterTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ShouterTests-Info.plist"; sourceTree = "<group>"; };
 		D7A68F18188FEEB0006C0D8C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D7A68F1A188FEEB0006C0D8C /* ShouterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShouterTests.m; sourceTree = "<group>"; };
+		D7A68F26188FEF68006C0D8C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		D7A68F2B18902FAF006C0D8C /* STRShoutListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRShoutListViewController.h; sourceTree = "<group>"; };
+		D7A68F2C18902FAF006C0D8C /* STRShoutListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRShoutListViewController.m; sourceTree = "<group>"; };
+		D7A68F2E18903905006C0D8C /* STRPostShoutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRPostShoutViewController.h; sourceTree = "<group>"; };
+		D7A68F2F18903905006C0D8C /* STRPostShoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRPostShoutViewController.m; sourceTree = "<group>"; };
+		D7A68F31189080D6006C0D8C /* STRShout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRShout.h; sourceTree = "<group>"; };
+		D7A68F32189080D6006C0D8C /* STRShout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRShout.m; sourceTree = "<group>"; };
+		D7E464AB18916DE800C19B9D /* STRCommentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRCommentViewController.h; sourceTree = "<group>"; };
+		D7E464AC18916DE900C19B9D /* STRCommentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRCommentViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +94,15 @@
 		D7A68EE9188FEEB0006C0D8C = {
 			isa = PBXGroup;
 			children = (
+				D7A68F31189080D6006C0D8C /* STRShout.h */,
+				D7A68F32189080D6006C0D8C /* STRShout.m */,
+				D7A68F2E18903905006C0D8C /* STRPostShoutViewController.h */,
+				D7A68F2F18903905006C0D8C /* STRPostShoutViewController.m */,
+				D7A68F26188FEF68006C0D8C /* Main.storyboard */,
+				D7E464AB18916DE800C19B9D /* STRCommentViewController.h */,
+				D7E464AC18916DE900C19B9D /* STRCommentViewController.m */,
+				D7A68F2B18902FAF006C0D8C /* STRShoutListViewController.h */,
+				D7A68F2C18902FAF006C0D8C /* STRShoutListViewController.m */,
 				D7A68EFB188FEEB0006C0D8C /* Shouter */,
 				D7A68F14188FEEB0006C0D8C /* ShouterTests */,
 				D7A68EF4188FEEB0006C0D8C /* Frameworks */,
@@ -118,6 +144,8 @@
 		D7A68EFC188FEEB0006C0D8C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D77E32841891C89600A387E4 /* STRUtility.h */,
+				D77E32851891C89600A387E4 /* STRUtility.m */,
 				D7A68EFD188FEEB0006C0D8C /* Shouter-Info.plist */,
 				D7A68EFE188FEEB0006C0D8C /* InfoPlist.strings */,
 				D7A68F01188FEEB0006C0D8C /* main.m */,
@@ -220,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7A68F27188FEF68006C0D8C /* Main.storyboard in Resources */,
 				D7A68F00188FEEB0006C0D8C /* InfoPlist.strings in Resources */,
 				D7A68F08188FEEB0006C0D8C /* Images.xcassets in Resources */,
 			);
@@ -240,7 +269,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7A68F3018903905006C0D8C /* STRPostShoutViewController.m in Sources */,
 				D7A68F06188FEEB0006C0D8C /* STRAppDelegate.m in Sources */,
+				D77E32861891C89600A387E4 /* STRUtility.m in Sources */,
+				D7E464AD18916DE900C19B9D /* STRCommentViewController.m in Sources */,
+				D7A68F33189080D6006C0D8C /* STRShout.m in Sources */,
+				D7A68F2D18902FAF006C0D8C /* STRShoutListViewController.m in Sources */,
 				D7A68F02188FEEB0006C0D8C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,6 +476,7 @@
 				D7A68F20188FEEB0006C0D8C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D7A68F21188FEEB0006C0D8C /* Build configuration list for PBXNativeTarget "ShouterTests" */ = {
 			isa = XCConfigurationList;
@@ -450,6 +485,7 @@
 				D7A68F23188FEEB0006C0D8C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
