@@ -11,7 +11,7 @@
 
 @implementation STRUtility
 
-
+// Gets the location for tagging shouts
 + (CLLocation*)getUpToDateLocation
 {
     
