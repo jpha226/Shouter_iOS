@@ -8,11 +8,16 @@
 
 #import <UIKit/UIKit.h>
 #import "STRShout.h"
+#import "STRShouterAPI.h"
 
-@interface STRCommentViewController : UITableViewController
+@interface STRCommentViewController : UITableViewController <ShouterAPIDelegate>;
 
 @property NSMutableArray *commentList;
 @property (nonatomic, strong) IBOutlet UILabel *headerLabel;
+
 @property STRShout *headerShout;
+@property STRShouterAPI *api;
+
+-(void) updateList;
 
 @end

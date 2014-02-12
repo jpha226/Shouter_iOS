@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "STRShout.h"
+#import "STRShouterAPI.h"
 
 @interface STRPostShoutViewController : UIViewController
 
 @property STRShout *createShout;
 
+
 @end
+

@@ -7,6 +7,7 @@
 //
 
 #import "STRUtility.h"
+#import "STRShout.h"
 #import <CoreLocation/CoreLocation.h>
 
 @implementation STRUtility
@@ -52,6 +53,34 @@
         NSLog(@"latitude %+.6f, longitude %+.6f\n", location.coordinate.latitude, location.coordinate.longitude);
     
     }
+}
+
++ (STRShout*) prepareShoutResponse: (NSString*)message{
+    
+    STRShout *returnShout = [[STRShout alloc] init];
+    returnShout.shoutMessage = message;
+    // Get the location for the shout
+    CLLocation *currentLocation = [STRUtility getUpToDateLocation];
+    
+    if (currentLocation == nil) {
+        NSLog(@"nil location");
+        returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",69.0];
+        returnShout.shoutLongitude = [NSString stringWithFormat:@"%f",13.0];
+    }
+    else{
+        returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+        returnShout.shoutLongitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
+    
+    // Time stamp the shout
+    NSDate* eventDate = currentLocation.timestamp;
+    returnShout.shoutTime = eventDate.description;
+    returnShout.phoneId = @"phoneID";
+    returnShout.parentId = @"empty";
+    // Assign phone ID / User to the shout
+    
+    NSLog(@"latitude: %f, longitude %f", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
+    
+    return returnShout;
 }
 
 

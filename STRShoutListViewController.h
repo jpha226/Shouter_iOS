@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "STRShouterAPI.h"
+#import "STRShout.h"
 
-@interface STRShoutListViewController : UITableViewController
+@interface STRShoutListViewController : UITableViewController <ShouterAPIDelegate>
 
 @property NSMutableArray *shoutList;
+@property (nonatomic) STRShouterAPI *api;
+
+- (void) updateList;
 
 @end

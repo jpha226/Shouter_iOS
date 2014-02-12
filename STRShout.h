@@ -7,15 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "STRUser.h"
 
 @interface STRShout : NSObject
 
 @property NSString *shoutMessage;
 @property NSString *phoneId;
-@property double *shoutLatitude;
-@property double *shoutLongitude;
+@property STRUser *shoutPoster;
+@property NSString *shoutLatitude;
+@property NSString *shoutLongitude;
 @property NSString *parentId;
 @property NSString *shoutId;
-@property NSString *shoutLocation;
+@property NSString *shoutTime;
 
 @end

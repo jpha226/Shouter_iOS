@@ -11,14 +11,16 @@
 #import <CoreLocation/CoreLocation.h>
 #import "STRUtility.h"
 
+
 @interface STRPostShoutViewController ()
 
 
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *shoutButton;
 
-
 @end
+
+
 
 @implementation STRPostShoutViewController
 
@@ -27,11 +29,13 @@
     if (sender != self.shoutButton) return;
     if (self.textView.text.length > 0) {
         
-        [self prepareShoutResponse];
+        //[self prepareShoutResponse];
+        self.createShout = [STRUtility prepareShoutResponse:self.textView.text];
         
     }
 }
 
+// Deprecated function. Now handled with STRUtility.prepareShoutResponse
 - (void) prepareShoutResponse
 {
     self.createShout = [[STRShout alloc] init];
@@ -41,16 +45,18 @@
     CLLocation *currentLocation = [STRUtility getUpToDateLocation];
     if (currentLocation == nil) {
         NSLog(@"nil location");
+        self.createShout.shoutLatitude = [NSString stringWithFormat:@"%f",69.0];
+        self.createShout.shoutLongitude = [NSString stringWithFormat:@"%f",13.0];
     }
     else{
-        *(self.createShout.shoutLatitude) = currentLocation.coordinate.latitude;
-        *(self.createShout.shoutLongitude) = currentLocation.coordinate.longitude;
-    }
+        self.createShout.shoutLatitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+        self.createShout.shoutLongitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
     
     // Time stamp the shout
     NSDate* eventDate = currentLocation.timestamp;
-    self.createShout.shoutLocation = eventDate.description;
-    
+    self.createShout.shoutTime = eventDate.description;
+    self.createShout.phoneId = @"phoneID";
+    self.createShout.parentId = @"empty";
     // Assign phone ID / User to the shout
     
     NSLog(@"latitude: %f, longitude %f", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);

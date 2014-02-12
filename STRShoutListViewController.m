@@ -10,6 +10,9 @@
 #import "STRShout.h"
 #import "STRPostShoutViewController.h"
 #import "STRCommentViewController.h"
+#import "STRShouterAPI.h"
+#import "STRUtility.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface STRShoutListViewController ()
 
@@ -22,12 +25,11 @@
 
 - (void)loadInitialData{
     
-    STRShout *shout1 = [[STRShout alloc] init];
-    shout1.shoutMessage = @"Test Shout";
-    [self.shoutList addObject:shout1];
-    STRShout *shout2 = [[STRShout alloc] init];
-    shout2.shoutMessage = @"Hello Shouter!";
-    [self.shoutList addObject:shout2];
+    self.api = [[STRShouterAPI alloc] init];
+    //[self.api register:@"phoneID" :@"first" :@"last" :@"blank"];
+    [self.api setDelegate:self];
+    [self refresh];
+    
 }
 
 - (IBAction)unwindToList:(UIStoryboardSegue *)segue
@@ -35,8 +37,11 @@
     STRPostShoutViewController *source = [segue sourceViewController];
     STRShout *newShout = source.createShout;
     if (newShout != nil) {
-        [self.shoutList insertObject:newShout atIndex:0];
-        [self.tableView reloadData];
+        //[self.shoutList insertObject:newShout atIndex:0];
+        //[self.tableView reloadData];
+        [self.api postShout:newShout];
+        [self updateList];
+        
     }
 }
 
@@ -45,6 +50,7 @@
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing Shouts..."];
     
     // Refresh code goes here
+    [self refresh];
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"MMM d, h:mm a"];
@@ -52,6 +58,21 @@
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
     [refresh endRefreshing];
     
+}
+
+- (void) refresh
+{
+    CLLocation *currentLocation = [STRUtility getUpToDateLocation];
+    NSString *lat, *lon;
+    if (currentLocation == nil) {
+        NSLog(@"nil location");
+        lat = [NSString stringWithFormat:@"%f",69.0];
+        lon = [NSString stringWithFormat:@"%f",13.0];
+    }
+    else{
+        lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+        lon = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
+    [self.api getShout:lat :lon];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -87,14 +108,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
     return [self.shoutList count];
 }
@@ -108,6 +127,7 @@
     int shoutCount = [self.shoutList count];
     STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
     cell.textLabel.text = cellShout.shoutMessage;
+    cell.detailTextLabel.text = @"User Name";
     
     return cell;
 }
@@ -168,6 +188,89 @@
     
     }
     
+}
+
+- (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
+{
+    NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"onGetSR: %@",response);
+    NSError *error = nil;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    NSMutableArray *tempList = [[NSMutableArray alloc] init];
+    
+    if (error != nil) {
+        NSLog(@"Error parsing JSON.");
+    }
+    else {
+        
+        NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
+        //NSLog(@"shouts: %@", shouts);
+        NSDictionary *shout;
+        
+        for (int i=0; i<[shouts count]; i++) {
+            
+            shout = [shouts objectAtIndex:i];
+            STRShout *newShout = [[STRShout alloc] init];
+            newShout.shoutId = [shout objectForKey:@"id"];
+            newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+            newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+            newShout.shoutMessage = [shout objectForKey:@"message"];
+            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.shoutTime = [shout objectForKey:@"timestamp"];
+            [tempList insertObject:newShout atIndex:0];
+            
+        }
+        self.api.shoutList = tempList;
+        [self updateList];
+    }
+    
+    return nil;
+}
+
+- (void) onPostShoutReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
+{
+    NSError *error = nil;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    NSMutableArray *tempList = [[NSMutableArray alloc] init];
+    
+    if (error != nil) {
+        NSLog(@"Error parsing JSON.");
+    }
+    else {
+        
+        NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
+        //NSLog(@"shouts: %@", shouts);
+        NSDictionary *shout;
+        
+        for (int i=0; i<[shouts count]; i++) {
+            
+            shout = [shouts objectAtIndex:i];
+            STRShout *newShout = [[STRShout alloc] init];
+            newShout.shoutId = [shout objectForKey:@"id"];
+            newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+            newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+            newShout.shoutMessage = [shout objectForKey:@"message"];
+            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.shoutTime = [shout objectForKey:@"timestamp"];
+            [tempList insertObject:newShout atIndex:0];
+            
+        }
+        self.api.shoutList = tempList;
+        [self updateList];
+    }
+}
+
+
+- (void) onRegistrationReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception
+{
+    
+}
+
+- (void) updateList
+{
+    self.shoutList = self.api.shoutList;
+    [self.tableView reloadData];
+    NSLog(@"updated");
 }
 
 @end

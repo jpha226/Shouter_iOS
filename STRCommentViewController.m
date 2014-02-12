@@ -9,6 +9,9 @@
 #import "STRCommentViewController.h"
 #import "STRShout.h"
 #import "STRPostShoutViewController.h"
+#import "STRShouterAPI.h"
+#import "STRPostCommentCell.m"
+#import "STRUtility.h"
 
 @interface STRCommentViewController ()
 
@@ -23,12 +26,14 @@
 
 - (void)loadInitialData{
     
-    STRShout *comment1 = [[STRShout alloc] init];
-    comment1.shoutMessage = @"Test Comment";
-    [self.commentList addObject:comment1];
-    STRShout *comment2 = [[STRShout alloc] init];
-    comment2.shoutMessage = @"Hello Commenter!";
-    [self.commentList addObject:comment2];
+    self.api = [[STRShouterAPI alloc] init];
+    [self.api setDelegate:self];
+    [self refresh];
+}
+
+- (void) refresh
+{
+    [self.api getComment:headerShout.shoutId];
 }
 
 - (IBAction)unwindToList:(UIStoryboardSegue *)segue
@@ -43,8 +48,7 @@
         
         }
         
-        [self.commentList addObject:newComment];
-        [self.tableView reloadData];
+        [self.api postComment:newComment];
     }
 }
 
@@ -80,39 +84,99 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
     // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
     // Return the number of rows in the section.
-    return [self.commentList count];
+    return [self.commentList count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"commentCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
-    int shoutCount = [self.commentList count];
-    STRShout *cellShout = [self.commentList objectAtIndex:indexPath.row];
-    cell.textLabel.text = cellShout.shoutMessage;
+    UITableViewCell *cell;
+    
+    if(indexPath.row == [self.commentList count]){
+        
+        static NSString *CellIdentifier = @"postCommentCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        
+        
+        //UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(10,0,300,50)];
+        //textField.tag = 1000;
+        //textField.placeholder = @"Type comment here";
+        //textField.delegate = self;
+       //[cell.contentView addSubview:textField];
+        
+        //UIButton *postComment = [[UIButton alloc] init];
+        //[postComment addTarget:self action:@selector(clickedShoutBack:) forControlEvents:UIControlEventTouchDown];
+        //[postComment setTitle:@"ShoutBack" forState:UIControlStateNormal];
+        //postComment.frame = CGRectMake(150.0f, 5.0f, 150.0f, 30.0f);
+        //[cell addSubview:postComment];
+        
+    }
+    else{
+        
+        static NSString *CellIdentifier = @"commentCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+        // Configure the cell...
+        int shoutCount = [self.commentList count] - 1;
+        STRShout *cellShout = [self.commentList objectAtIndex:(shoutCount - indexPath.row)];
+        cell.textLabel.text = cellShout.shoutMessage;
+    }
     
     return cell;
 }
 
-/*
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"postCommentCell" forIndexPath:indexPath];
+    
+    UITextField *text = (UITextField*)[cell.contentView viewWithTag:1000];
+    text.placeholder = @"";
+    [self.tableView reloadData];
+    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+- (IBAction)clickedShoutBack:(id)sender {
+    
+    UIButton *shoutBack = (UIButton*)sender;
+    UIView *cell = (UIView*)shoutBack.superview;
+    UITextView *comment = (UITextView*)[cell viewWithTag:22];
+    NSLog(@"%@",comment.text);
+    
+    if(comment.text.length > 0){
+        
+        STRShout *newComment = [STRUtility prepareShoutResponse:comment.text];
+        
+        if (newComment != nil) {
+            
+            if(self.headerShout.shoutId != nil){
+                
+                newComment.parentId = self.headerShout.shoutId;
+                
+            }
+            
+            [self.api postComment:newComment];
+        }
+
+        
+    }
+    comment.text = @"";
+    
+}
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    if (indexPath.row == self.commentList.count) {
+        return YES;
+    }
+    return NO;
 }
-*/
 
 /*
 // Override to support editing the table view.
@@ -155,5 +219,86 @@
 }
 
  */
+
+- (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
+{
+    NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    NSLog(@"onGetSR: %@",response);
+    NSError *error = nil;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    NSMutableArray *tempList = [[NSMutableArray alloc] init];
+    
+    if (error != nil) {
+        NSLog(@"Error parsing JSON.");
+    }
+    else {
+        
+        NSArray* shouts = [jsonDict objectForKey:@"comments"]; //2
+        //NSLog(@"shouts: %@", shouts);
+        NSDictionary *shout;
+        
+        for (int i=0; i<[shouts count]; i++) {
+            
+            shout = [shouts objectAtIndex:i];
+            STRShout *newShout = [[STRShout alloc] init];
+            newShout.shoutId = [shout objectForKey:@"id"];
+            newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+            newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+            newShout.shoutMessage = [shout objectForKey:@"message"];
+            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.shoutTime = [shout objectForKey:@"timestamp"];
+            [tempList insertObject:newShout atIndex:0];
+            
+        }
+        self.api.shoutList = tempList;
+        [self updateList];
+    }
+    
+    return nil;
+}
+
+- (void) onPostCommentReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception{
+
+    NSError *error = nil;
+    NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    NSMutableArray *tempList = [[NSMutableArray alloc] init];
+    
+    if (error != nil) {
+        NSLog(@"Error parsing JSON.");
+    }
+    else {
+        
+        NSArray* shouts = [jsonDict objectForKey:@"comments"]; //2
+        //NSLog(@"shouts: %@", shouts);
+        NSDictionary *shout;
+        
+        for (int i=0; i<[shouts count]; i++) {
+            
+            shout = [shouts objectAtIndex:i];
+            STRShout *newShout = [[STRShout alloc] init];
+            newShout.shoutId = [shout objectForKey:@"id"];
+            newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+            newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+            newShout.shoutMessage = [shout objectForKey:@"message"];
+            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.shoutTime = [shout objectForKey:@"timestamp"];
+            [tempList insertObject:newShout atIndex:0];
+            
+        }
+        self.api.shoutList = tempList;
+        [self updateList];
+    }
+
+}
+
+
+- (void) onRegistrationReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception{}
+
+
+- (void) updateList
+{
+    self.commentList = self.api.shoutList;
+    [self.tableView reloadData];
+}
 
 @end

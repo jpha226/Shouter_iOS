@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "STRShout.h"
 
 @interface STRUtility : NSObject
 
 + (CLLocation*)getUpToDateLocation;
++ (STRShout*)prepareShoutResponse: (NSString*)message;
 
 @end
