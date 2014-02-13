@@ -36,22 +36,6 @@
     [self.api getComment:headerShout.shoutId];
 }
 
-- (IBAction)unwindToList:(UIStoryboardSegue *)segue
-{
-    STRPostShoutViewController *source = [segue sourceViewController];
-    STRShout *newComment = source.createShout;
-    if (newComment != nil) {
-        
-        if(self.headerShout.shoutId != nil){
-            
-            newComment.parentId = self.headerShout.shoutId;
-        
-        }
-        
-        [self.api postComment:newComment];
-    }
-}
-
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -72,6 +56,9 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+  
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -99,24 +86,32 @@
     
     UITableViewCell *cell;
     
+    //tableView.layer.cornerRadius = 5.0f;
+    //tableView.layer.masksToBounds = NO;
+    //tableView.layer.borderWidth = 2;
+    //tableView.layer.shadowColor = [UIColor orangeColor].CGColor;
+    //tableView.layer.shadowOpacity = 0.4;
+    //tableView.layer.shadowRadius = 5.0f;
+    
     if(indexPath.row == [self.commentList count]){
         
         static NSString *CellIdentifier = @"postCommentCell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
+        CALayer *topBorder = [CALayer layer];
         
-        //UITextField *textField = [[UITextField alloc] initWithFrame:CGRectMake(10,0,300,50)];
-        //textField.tag = 1000;
-        //textField.placeholder = @"Type comment here";
-        //textField.delegate = self;
-       //[cell.contentView addSubview:textField];
+        topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.0f);
         
-        //UIButton *postComment = [[UIButton alloc] init];
-        //[postComment addTarget:self action:@selector(clickedShoutBack:) forControlEvents:UIControlEventTouchDown];
-        //[postComment setTitle:@"ShoutBack" forState:UIControlStateNormal];
-        //postComment.frame = CGRectMake(150.0f, 5.0f, 150.0f, 30.0f);
-        //[cell addSubview:postComment];
+        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                      alpha:1.0f].CGColor;
+        [cell.layer addSublayer:topBorder];
+        CALayer *bottomBorder = [CALayer layer];
         
+        bottomBorder.frame = CGRectMake(0.0f, 75, cell.frame.size.width, 1.0f);
+        
+        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                         alpha:1.0f].CGColor;
+        [cell.layer addSublayer:bottomBorder];
     }
     else{
         
@@ -127,6 +122,16 @@
         int shoutCount = [self.commentList count] - 1;
         STRShout *cellShout = [self.commentList objectAtIndex:(shoutCount - indexPath.row)];
         cell.textLabel.text = cellShout.shoutMessage;
+         cell.detailTextLabel.text = @"User Name";
+        
+        CALayer *topBorder = [CALayer layer];
+        topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.0f);
+        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                         alpha:1.0f].CGColor;
+        [cell.layer addSublayer:topBorder];
+        
+        
+    
     }
     
     return cell;
@@ -134,10 +139,25 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"postCommentCell" forIndexPath:indexPath];
+    UITableViewCell *cell;
     
-    UITextField *text = (UITextField*)[cell.contentView viewWithTag:1000];
-    text.placeholder = @"";
+    if(indexPath.row == [self.commentList count]){
+        
+        static NSString *CellIdentifier = @"postCommentCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        
+    }
+    else{
+        
+        static NSString *CellIdentifier = @"commentCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        
+        // Configure the cell...
+        int shoutCount = [self.commentList count] - 1;
+        STRShout *cellShout = [self.commentList objectAtIndex:(shoutCount - indexPath.row)];
+        cell.textLabel.text = cellShout.shoutMessage;
+    }
+    
     [self.tableView reloadData];
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -145,7 +165,7 @@
     
     UIButton *shoutBack = (UIButton*)sender;
     UIView *cell = (UIView*)shoutBack.superview;
-    UITextView *comment = (UITextView*)[cell viewWithTag:22];
+    UITextField *comment = (UITextField*)[cell viewWithTag:22];
     NSLog(@"%@",comment.text);
     
     if(comment.text.length > 0){
@@ -176,6 +196,16 @@
         return YES;
     }
     return NO;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == self.commentList.count) {
+        return 75;
+    }
+    else
+        return 45;
+    
 }
 
 /*

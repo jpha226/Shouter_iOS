@@ -10,9 +10,10 @@
 #import "STRShout.h"
 #import "STRShouterAPI.h"
 
-@interface STRPostShoutViewController : UIViewController
+@interface STRPostShoutViewController : UIViewController <UITextViewDelegate>
 
 @property STRShout *createShout;
+@property (strong, nonatomic) IBOutlet UITextView *textView;
 
 
 @end

@@ -14,8 +14,6 @@
 
 @interface STRPostShoutViewController ()
 
-
-@property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *shoutButton;
 
 @end
@@ -68,7 +66,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
     }
     return self;
 }
@@ -77,12 +74,41 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    self.textView.delegate = self;
+    self.textView.text = @"What's happening around you?";
+    self.textView.textColor = [UIColor lightGrayColor];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@"What's happening around you?"]) {
+        textView.text = @"";
+        textView.textColor = [UIColor blackColor]; //optional
+    }
+    [textView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.text = @"placeholder text here...";
+        textView.textColor = [UIColor lightGrayColor]; //optional
+    }
+    [textView resignFirstResponder];
+}
+
+- (void) textViewDidChange:(UITextView *)textView
+{
+    NSUInteger textLength;
+    textLength = [textView.text length];
+    //characterLabel.text = [NSString stringWithFormat:@"%u", length]
+    
 }
 
 @end

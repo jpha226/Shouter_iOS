@@ -96,6 +96,9 @@
     action:@selector(refreshView:)
     forControlEvents:UIControlEventValueChanged];
     self.refreshControl = refresh;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -128,6 +131,14 @@
     STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
     cell.textLabel.text = cellShout.shoutMessage;
     cell.detailTextLabel.text = @"User Name";
+    
+    CALayer *bottomBorder = [CALayer layer];
+    
+    bottomBorder.frame = CGRectMake(0.0f, 45, cell.frame.size.width, 1.0f);
+    
+    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
+                                                     alpha:1.0f].CGColor;
+    [cell.layer addSublayer:bottomBorder];
     
     return cell;
 }
