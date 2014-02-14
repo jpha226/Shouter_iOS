@@ -10,7 +10,7 @@
 #import "STRShout.h"
 #import <CoreLocation/CoreLocation.h>
 #import "STRUtility.h"
-
+#define MAX_LENGTH = 141;
 
 @interface STRPostShoutViewController ()
 
@@ -105,10 +105,38 @@
 
 - (void) textViewDidChange:(UITextView *)textView
 {
-    NSUInteger textLength;
+    NSInteger textLength;
     textLength = [textView.text length];
-    //characterLabel.text = [NSString stringWithFormat:@"%u", length]
     
+    if (textLength <= 141) {
+        
+        UINavigationItem *navBar = self.navigationItem;
+        navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
+   
+    }
+    else{
+        
+        UINavigationItem *navBar = self.navigationItem;
+        navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
+        navBar.rightBarButtonItem.enabled = false;
+        
+    }
+    
+}
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    /*NSUInteger newLength = (textView.text.length - range.length) + text.length;
+    if(newLength <= 141)
+    {
+        return YES;
+    } else {
+        NSUInteger emptySpace = 141 - (textView.text.length - range.length);
+        textView.text = [[[textView.text substringToIndex:range.location]
+                          stringByAppendingString:[text substringToIndex:emptySpace]]
+                         stringByAppendingString:[textView.text substringFromIndex:(range.location + range.length)]];
+        return NO;
+     }*/ return YES;
 }
 
 @end

@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 #import "STRShouterAPI.h"
 #import "STRShout.h"
 
-@interface STRShoutListViewController : UITableViewController <ShouterAPIDelegate>
+@interface STRShoutListViewController : UITableViewController <ShouterAPIDelegate, CLLocationManagerDelegate>
 
 @property NSMutableArray *shoutList;
+@property CLLocationManager *locationManager;
 @property (nonatomic) STRShouterAPI *api;
 
 - (void) updateList;

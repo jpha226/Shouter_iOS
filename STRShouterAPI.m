@@ -66,11 +66,10 @@
         if(data.length > 0 && connectonError == nil)
         {
             NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",response);
+           
             [self.delegate onPostShoutReturn:self :self.returnData :nil];
             
         }
-        NSLog(@"%@",connectonError.debugDescription);
     }];
     
     
@@ -93,18 +92,17 @@
     NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
     
     self.returnData = [NSMutableData dataWithCapacity:0];
-    NSLog(@"connect");
+    
     //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
     [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
         
         if(data.length > 0 && connectonError == nil)
         {
             NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",response);
+           
             [self.delegate onGetShoutReturn:self :data :nil];
             
         }
-        NSLog(@"%@",connectonError.debugDescription);
     }];
     
     if(!self.connection){
@@ -156,10 +154,9 @@
         if(data.length > 0 && connectonError == nil)
         {
             NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",response);
+            
             [self.delegate onPostCommentReturn:self :data :nil];
         }
-        NSLog(@"%@",connectonError.debugDescription);
     }];
     
 }
@@ -179,18 +176,18 @@
     NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
     
     self.returnData = [NSMutableData dataWithCapacity:0];
-    NSLog(@"connect");
+   
     //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
     [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
         
         if(data.length > 0 && connectonError == nil)
         {
             NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            NSLog(@"%@",response);
+           
             [self.delegate onGetCommentReturn:self :data :nil];
             
         }
-        NSLog(@"%@",connectonError.debugDescription);
+        
     }];
     
     if(!self.connection){
@@ -231,7 +228,7 @@
 {
     // do something with the data
     // receivedData is declared as a property elsewhere
-    NSLog(@"Succeeded! Received %d bytes of data",[self.returnData length]);
+    //NSLog(@"Succeeded! Received %d bytes of data",[self.returnData length]);
     
     self.connection = nil;
     //self.returnData = nil;

@@ -10,8 +10,9 @@
 #import <CoreLocation/CoreLocation.h>
 #import "STRShout.h"
 
-@interface STRUtility : NSObject
+@interface STRUtility : NSObject <CLLocationManagerDelegate>
 
+@property CLLocationManager *locationManager;
 + (CLLocation*)getUpToDateLocation;
 + (STRShout*)prepareShoutResponse: (NSString*)message;
 

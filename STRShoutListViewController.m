@@ -22,6 +22,7 @@
 @implementation STRShoutListViewController
 
 @synthesize shoutList;
+@synthesize locationManager;
 
 - (void)loadInitialData{
     
@@ -62,7 +63,8 @@
 
 - (void) refresh
 {
-    CLLocation *currentLocation = [STRUtility getUpToDateLocation];
+    CLLocation *currentLocation = [self.locationManager location];// = [STRUtility getUpToDateLocation];
+    //[self getCurrentLocation];
     NSString *lat, *lon;
     if (currentLocation == nil) {
         NSLog(@"nil location");
@@ -73,6 +75,43 @@
         lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
         lon = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
     [self.api getShout:lat :lon];
+}
+
+- (void) getCurrentLocation
+{
+    NSLog(@"hey");
+    if(self.locationManager == nil){
+        NSLog(@"in here");
+        self.locationManager.purpose = @"hey";
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
+    
+    }
+    if([CLLocationManager locationServicesEnabled]){
+        NSLog(@"enabled");
+        [self.locationManager startUpdatingLocation];
+    }
+    
+}
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"didFailWithError: %@", error);
+    UIAlertView *errorAlert = [[UIAlertView alloc]
+                               initWithTitle:@"Error" message:@"Failed to Get Your Location" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [errorAlert show];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    NSLog(@"didUpdateToLocation: %@", newLocation);
+    CLLocation *currentLocation = newLocation;
+    
+    if (currentLocation != nil) {
+        NSLog(@"lat: %f", currentLocation.coordinate.latitude);
+    }
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -89,6 +128,8 @@
     [super viewDidLoad];
     self.shoutList = [[NSMutableArray alloc] init];
     [self loadInitialData];
+    
+    [self getCurrentLocation];
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
@@ -195,7 +236,7 @@
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         // Pass the selected object to the new view controller.
         viewController.headerShout = [self.shoutList objectAtIndex:indexPath.row];
-        NSLog(@"this function called");
+        
     
     }
     
@@ -204,7 +245,7 @@
 - (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
 {
     NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"onGetSR: %@",response);
+    
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
@@ -215,7 +256,7 @@
     else {
         
         NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
-        //NSLog(@"shouts: %@", shouts);
+        
         NSDictionary *shout;
         
         for (int i=0; i<[shouts count]; i++) {
@@ -250,7 +291,7 @@
     else {
         
         NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
-        //NSLog(@"shouts: %@", shouts);
+        
         NSDictionary *shout;
         
         for (int i=0; i<[shouts count]; i++) {
@@ -281,7 +322,6 @@
 {
     self.shoutList = self.api.shoutList;
     [self.tableView reloadData];
-    NSLog(@"updated");
 }
 
 @end

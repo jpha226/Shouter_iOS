@@ -86,13 +86,6 @@
     
     UITableViewCell *cell;
     
-    //tableView.layer.cornerRadius = 5.0f;
-    //tableView.layer.masksToBounds = NO;
-    //tableView.layer.borderWidth = 2;
-    //tableView.layer.shadowColor = [UIColor orangeColor].CGColor;
-    //tableView.layer.shadowOpacity = 0.4;
-    //tableView.layer.shadowRadius = 5.0f;
-    
     if(indexPath.row == [self.commentList count]){
         
         static NSString *CellIdentifier = @"postCommentCell";

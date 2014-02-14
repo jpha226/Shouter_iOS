@@ -10,6 +10,7 @@
 		B0A3A1EB189730D000C86786 /* STRShouterAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A3A1EA189730D000C86786 /* STRShouterAPI.m */; };
 		B0A3A1EE18A97A8400C86786 /* STRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A3A1ED18A97A8400C86786 /* STRUser.m */; };
 		B0A3A1F218A9923000C86786 /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = B0A3A1F118A9923000C86786 /* ic_launcher.png */; };
+		B0A3A1FA18ADBC0100C86786 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */; };
 		D77E32861891C89600A387E4 /* STRUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D77E32851891C89600A387E4 /* STRUtility.m */; };
 		D7A68EF6188FEEB0006C0D8C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF5188FEEB0006C0D8C /* Foundation.framework */; };
 		D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */; };
@@ -46,6 +47,7 @@
 		B0A3A1EC18A97A8300C86786 /* STRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRUser.h; sourceTree = "<group>"; };
 		B0A3A1ED18A97A8400C86786 /* STRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRUser.m; sourceTree = "<group>"; };
 		B0A3A1F118A9923000C86786 /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
+		B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D77E32841891C89600A387E4 /* STRUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRUtility.h; sourceTree = "<group>"; };
 		D77E32851891C89600A387E4 /* STRUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRUtility.m; sourceTree = "<group>"; };
 		D7A68EF2188FEEB0006C0D8C /* Shouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0A3A1FA18ADBC0100C86786 /* CoreLocation.framework in Frameworks */,
 				D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */,
 				D7A68EFA188FEEB0006C0D8C /* UIKit.framework in Frameworks */,
 				D7A68EF6188FEEB0006C0D8C /* Foundation.framework in Frameworks */,
@@ -134,6 +137,7 @@
 		D7A68EF4188FEEB0006C0D8C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */,
 				D7A68EF5188FEEB0006C0D8C /* Foundation.framework */,
 				D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */,
 				D7A68EF9188FEEB0006C0D8C /* UIKit.framework */,
