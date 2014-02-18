@@ -65,8 +65,7 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-           
+            
             [self.delegate onPostShoutReturn:self :self.returnData :nil];
             
         }
@@ -98,7 +97,7 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
            
             [self.delegate onGetShoutReturn:self :data :nil];
             
@@ -153,7 +152,7 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             
             [self.delegate onPostCommentReturn:self :data :nil];
         }

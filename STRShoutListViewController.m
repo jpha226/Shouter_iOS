@@ -82,7 +82,6 @@
     NSLog(@"hey");
     if(self.locationManager == nil){
         NSLog(@"in here");
-        self.locationManager.purpose = @"hey";
         self.locationManager.delegate = self;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     
@@ -167,18 +166,26 @@
     static NSString *CellIdentifier = @"ListPrototypeCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+    // Clear previous border lines
+    for (CALayer *layer in cell.layer.sublayers) {
+        if(layer.frame.size.height == 1.01f)
+            [layer removeFromSuperlayer];
+    }
+    
     // Configure the cell...
-    int shoutCount = [self.shoutList count];
     STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
-    cell.textLabel.text = cellShout.shoutMessage;
-    cell.detailTextLabel.text = @"User Name";
+    cell.detailTextLabel.text = cellShout.shoutMessage;
+    cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    cell.detailTextLabel.numberOfLines = 0;
+    cell.textLabel.text = @"User Name";
+    cell.textLabel.font = [UIFont systemFontOfSize:15.0];
     
     CALayer *bottomBorder = [CALayer layer];
+    NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
     
-    bottomBorder.frame = CGRectMake(0.0f, 45, cell.frame.size.width, 1.0f);
+    bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
+    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
     
-    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                     alpha:1.0f].CGColor;
     [cell.layer addSublayer:bottomBorder];
     
     return cell;
@@ -223,6 +230,17 @@
 }
 */
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
+    NSString *label = [cellShout shoutMessage];
+    NSInteger num_lines = 1 + ([label length] / 32);
+    return 20 + num_lines * 15 - (num_lines - 1) * 4;
+    
+}
+
+
+
 
 #pragma mark - Navigation
 
@@ -242,9 +260,9 @@
     
 }
 
-- (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
+- (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
-    NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
@@ -279,7 +297,7 @@
     return nil;
 }
 
-- (void) onPostShoutReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
+- (void) onPostShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];

@@ -25,16 +25,16 @@
 - (NSMutableArray*) getShout: (NSString*) latitude :(NSString*) longitude;
 - (NSMutableArray*) getComment: (NSString*) parentID;
 - (void) postComment: (STRShout*) message;
-- (NSMutableArray*) getShoutList;
+//- (NSMutableArray*) getShoutList;
 
 @end
 
 
 @protocol ShouterAPIDelegate <NSObject>
-- (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception;
-- (void) onPostShoutReturn:(STRShouterAPI*)api :(NSMutableData*) data :(NSException*)exception;
+- (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;
+- (void) onPostShoutReturn:(STRShouterAPI*)api :(NSData*) data :(NSException*)exception;
 - (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception;
-- (void) onPostCommentReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception;
+- (void) onPostCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;
 - (void) onRegistrationReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception;
 
 

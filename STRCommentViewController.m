@@ -50,7 +50,20 @@
     [super viewDidLoad];
     self.commentList = [[NSMutableArray alloc] init];
     [self loadInitialData];
-    self.headerLabel.text = self.headerShout.shoutMessage;
+    
+    NSString *label = [self.headerShout shoutMessage];
+    NSInteger num_lines = 1 + ([label length] / 35);
+    
+    NSUInteger labelHeight = 25 + num_lines * 25 - (num_lines - 1) * 4;
+    
+    self.headerLabel.text = label;
+    UIView *headerView = [self.headerLabel superview];
+    headerView.frame = CGRectMake(0, 0, headerView.frame.size.width, labelHeight);
+    self.headerLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.headerLabel.numberOfLines = 0;
+    self.userNameLabel.text = @"First Last";
+    self.headerLabel.frame = CGRectMake(0, self.userNameLabel.frame.size.height, self.headerLabel.frame.size.width, labelHeight);
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -91,53 +104,108 @@
         static NSString *CellIdentifier = @"postCommentCell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
+        // Clear previous border lines
+        //for (CALayer *layer in cell.layer.sublayers) {
+          //  if(layer.frame.size.height == 1.01f)
+            //    [layer removeFromSuperlayer];
+        //}
+        
+        
         CALayer *topBorder = [CALayer layer];
-        
-        topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.0f);
-        
-        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                      alpha:1.0f].CGColor;
+        topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.01f);
+        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
         [cell.layer addSublayer:topBorder];
+        
+        CALayer *bottomBorder = [CALayer layer];
+        bottomBorder.frame = CGRectMake(0.0f, 75, cell.frame.size.width, 1.01f);
+        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+        [cell.layer addSublayer:bottomBorder];
+        
+        UITextView *commentView = [[UITextView alloc] initWithFrame:CGRectMake(5, 5, cell.frame.size.width - 10, cell.frame.size.height - 35)];
+        commentView.delegate = self;
+        commentView.tag = 22;
+        commentView.text = @"Shout back!";
+        commentView.textColor = [UIColor lightGrayColor];
+        [cell.contentView addSubview:commentView];
+        
+        commentView.layer.borderWidth = 1;
+        commentView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+        
+        
+    }
+    else if(indexPath.row == 0){
+        
+        static NSString *CellIdentifier = @"commentCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        
+        // Clear previous border lines
+        //for (CALayer *layer in cell.layer.sublayers) {
+          //  if(layer.frame.size.height == 1.01f)
+            //    [layer removeFromSuperlayer];
+        //}
+        
+        // Configure the cell...
+        STRShout *cellShout = [self.commentList objectAtIndex:([self.commentList count] - 1)];
+        cell.detailTextLabel.text = cellShout.shoutMessage;
+        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.text = @"User Name";
+        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
+        
+        CALayer *topBorder = [CALayer layer];
+        NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
+        
+        topBorder.frame = CGRectMake(0, 0, cell.frame.size.width, 1.01f);
+        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+        [cell.layer addSublayer:topBorder];
+        
         CALayer *bottomBorder = [CALayer layer];
         
-        bottomBorder.frame = CGRectMake(0.0f, 75, cell.frame.size.width, 1.0f);
-        
-        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                         alpha:1.0f].CGColor;
+        bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
+        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
         [cell.layer addSublayer:bottomBorder];
+
     }
     else{
+        
         
         static NSString *CellIdentifier = @"commentCell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
+        // Clear previous border lines
+        for (CALayer *layer in cell.layer.sublayers) {
+            if(layer.frame.size.height == 1.01f)
+                [layer removeFromSuperlayer];
+        }
+        
         // Configure the cell...
-        int shoutCount = [self.commentList count] - 1;
-        STRShout *cellShout = [self.commentList objectAtIndex:(shoutCount - indexPath.row)];
-        cell.textLabel.text = cellShout.shoutMessage;
-         cell.detailTextLabel.text = @"User Name";
+        NSUInteger commentCount = [self.commentList count];
+        STRShout *cellShout = [self.commentList objectAtIndex:(commentCount - indexPath.row - 1)];
+        cell.detailTextLabel.text = cellShout.shoutMessage;
+        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        cell.detailTextLabel.numberOfLines = 0;
+        cell.textLabel.text = @"User Name";
+        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
         
-        CALayer *topBorder = [CALayer layer];
-        topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.0f);
-        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f
-                                                         alpha:1.0f].CGColor;
-        [cell.layer addSublayer:topBorder];
+        CALayer *bottomBorder = [CALayer layer];
+        NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
         
-        
+        bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
+        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+        [cell.layer addSublayer:bottomBorder];
     
     }
     
     return cell;
 }
 
+/*
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell;
     
     if(indexPath.row == [self.commentList count]){
         
-        static NSString *CellIdentifier = @"postCommentCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
     }
     else{
@@ -154,14 +222,15 @@
     [self.tableView reloadData];
     [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
+ */
 - (IBAction)clickedShoutBack:(id)sender {
     
     UIButton *shoutBack = (UIButton*)sender;
     UIView *cell = (UIView*)shoutBack.superview;
-    UITextField *comment = (UITextField*)[cell viewWithTag:22];
-    NSLog(@"%@",comment.text);
+    UITextView *comment = (UITextView*)[cell viewWithTag:22];
+    NSLog(@"comment: %@",comment.description);
     
-    if(comment.text.length > 0){
+    if(comment.text.length > 0 && comment.text.length <= 141){
         
         STRShout *newComment = [STRUtility prepareShoutResponse:comment.text];
         
@@ -196,9 +265,15 @@
     if (indexPath.row == self.commentList.count) {
         return 75;
     }
-    else
-        return 45;
+    else{
+        NSUInteger commentCount = [self.commentList count];
+        STRShout *cellShout = [self.commentList objectAtIndex:(commentCount - indexPath.row - 1)];
+        NSString *label = [cellShout shoutMessage];
+        NSInteger num_lines = 1 + ([label length] / 32);
+        
+        return 20 + num_lines * 15 - (num_lines - 1) * 4;
     
+    }
 }
 
 /*
@@ -243,7 +318,47 @@
 
  */
 
-- (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    
+    if ([textView.text isEqualToString:@"Shout back!"]) {
+        textView.text = @"";
+        textView.textColor = [UIColor blackColor]; //optional
+    }
+    [textView becomeFirstResponder];
+}
+
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([textView.text isEqualToString:@""]) {
+        textView.text = @"Shout back!";
+        textView.textColor = [UIColor lightGrayColor]; //optional
+    }
+    [textView resignFirstResponder];
+}
+
+- (void) textViewDidChange:(UITextView *)textView
+{
+    UITableViewCell *cell = (UITableViewCell *)textView.superview;
+    UITextView *commentView = (UITextView*)[cell viewWithTag:22];
+    commentView.text = textView.text;
+    
+    NSInteger textLength = [textView.text length];
+    
+    if (textLength <= 141) {
+        
+        UINavigationItem *navBar = self.navigationItem;
+        navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
+        
+        
+    }
+    
+}
+
+
+- (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
     NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSLog(@"onGetSR: %@",response);
@@ -280,7 +395,7 @@
     return nil;
 }
 
-- (void) onPostCommentReturn:(STRShouterAPI*)api :(NSMutableData*)data :(NSException*)exception{
+- (void) onPostCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
 
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];

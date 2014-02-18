@@ -112,6 +112,7 @@
         
         UINavigationItem *navBar = self.navigationItem;
         navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
+        navBar.rightBarButtonItem.enabled = true;
    
     }
     else{

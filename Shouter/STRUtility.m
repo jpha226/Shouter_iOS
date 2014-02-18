@@ -55,7 +55,7 @@
     CLLocation *currentLocation = newLocation;
     
     if (currentLocation != nil) {
-        NSLog(@"latitude: %@",currentLocation.coordinate.latitude);
+        //NSLog(@"latitude: %@",currentLocation.coordinate.latitude);
     }
 }
 
