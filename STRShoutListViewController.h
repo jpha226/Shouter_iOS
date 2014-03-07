@@ -16,6 +16,9 @@
 @property NSMutableArray *shoutList;
 @property CLLocationManager *locationManager;
 @property (nonatomic) STRShouterAPI *api;
+@property (nonatomic) BOOL isLoggedIn;
+@property NSString* userName;
+@property NSString* passWord;
 
 - (void) updateList;
 

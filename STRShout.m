@@ -7,8 +7,10 @@
 //
 
 #import "STRShout.h"
+#import "STRUser.h"
 
 @implementation STRShout
 
+@synthesize shoutPoster;
 
 @end

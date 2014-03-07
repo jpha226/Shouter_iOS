@@ -61,7 +61,10 @@
     headerView.frame = CGRectMake(0, 0, headerView.frame.size.width, labelHeight);
     self.headerLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.headerLabel.numberOfLines = 0;
-    self.userNameLabel.text = @"First Last";
+    NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
+    int name = rand();
+    name = name % 5;
+    self.userNameLabel.text = @"JosiahHanna";
     self.headerLabel.frame = CGRectMake(0, self.userNameLabel.frame.size.height, self.headerLabel.frame.size.width, labelHeight);
     
     // Uncomment the following line to preserve selection between presentations.
@@ -149,6 +152,9 @@
         cell.detailTextLabel.text = cellShout.shoutMessage;
         cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         cell.detailTextLabel.numberOfLines = 0;
+        NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
+        int name = rand();
+        name = name % 5;
         cell.textLabel.text = @"User Name";
         cell.textLabel.font = [UIFont systemFontOfSize:15.0];
         
@@ -184,13 +190,16 @@
         cell.detailTextLabel.text = cellShout.shoutMessage;
         cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         cell.detailTextLabel.numberOfLines = 0;
+        NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
+        int name = rand();
+        name = name % 5;
         cell.textLabel.text = @"User Name";
         cell.textLabel.font = [UIFont systemFontOfSize:15.0];
         
         CALayer *bottomBorder = [CALayer layer];
         NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
         
-        bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
+        bottomBorder.frame = CGRectMake(0.0f, 25 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
         bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
         [cell.layer addSublayer:bottomBorder];
     
@@ -271,7 +280,7 @@
         NSString *label = [cellShout shoutMessage];
         NSInteger num_lines = 1 + ([label length] / 32);
         
-        return 20 + num_lines * 15 - (num_lines - 1) * 4;
+        return 25 + num_lines * 15 - (num_lines - 1) * 4;
     
     }
 }
@@ -347,12 +356,17 @@
     
     NSInteger textLength = [textView.text length];
     
-    if (textLength <= 141) {
+    if (textLength <= 141 && textLength > 0) {
         
         UINavigationItem *navBar = self.navigationItem;
         navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
         
         
+    }
+    else if(textLength == 0){
+        
+        UINavigationItem *navBar = self.navigationItem;
+        navBar.title = @"Shouter";
     }
     
 }

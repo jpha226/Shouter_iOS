@@ -77,6 +77,7 @@
     self.textView.delegate = self;
     self.textView.text = @"What's happening around you?";
     self.textView.textColor = [UIColor lightGrayColor];
+    self.shoutButton.enabled = false;
 }
 
 - (void)didReceiveMemoryWarning
@@ -108,17 +109,24 @@
     NSInteger textLength;
     textLength = [textView.text length];
     
-    if (textLength <= 141) {
+    if (textLength <= 141 && textLength > 0) {
         
         UINavigationItem *navBar = self.navigationItem;
-        navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
+        //navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
         navBar.rightBarButtonItem.enabled = true;
    
+    }
+    else if(textLength == 0){
+        
+        UINavigationItem *navBar = self.navigationItem;
+        navBar.title = @"Shouter";
+        navBar.rightBarButtonItem.enabled = false;
+        
     }
     else{
         
         UINavigationItem *navBar = self.navigationItem;
-        navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
+        //navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
         navBar.rightBarButtonItem.enabled = false;
         
     }

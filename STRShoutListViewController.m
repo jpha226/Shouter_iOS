@@ -7,6 +7,7 @@
 //
 
 #import "STRShoutListViewController.h"
+#import "STRLogInViewController.h"
 #import "STRShout.h"
 #import "STRPostShoutViewController.h"
 #import "STRCommentViewController.h"
@@ -24,6 +25,7 @@
 @synthesize shoutList;
 @synthesize locationManager;
 
+
 - (void)loadInitialData{
     
     self.api = [[STRShouterAPI alloc] init];
@@ -35,15 +37,25 @@
 
 - (IBAction)unwindToList:(UIStoryboardSegue *)segue
 {
-    STRPostShoutViewController *source = [segue sourceViewController];
-    STRShout *newShout = source.createShout;
-    if (newShout != nil) {
-        //[self.shoutList insertObject:newShout atIndex:0];
-        //[self.tableView reloadData];
-        [self.api postShout:newShout];
-        [self updateList];
-        
+    UIViewController *source = [segue sourceViewController];
+    
+    if([source isKindOfClass:[STRPostShoutViewController class]]){
+    
+        STRShout *newShout = ((STRPostShoutViewController*)source).createShout;
+        if (newShout != nil) {
+            //[self.shoutList insertObject:newShout atIndex:0];
+            //[self.tableView reloadData];
+            [self.api postShout:newShout];
+            [self updateList];
+            
+        }
     }
+    else{
+        self.userName = ((STRLogInViewController*)source).userName;
+        self.passWord = ((STRLogInViewController*)source).passWord;
+        NSLog(@"%@",self.userName);
+    }
+    
 }
 
 - (void)refreshView: (UIRefreshControl *) refresh {
@@ -117,16 +129,24 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
+        
     }
+    
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.isLoggedIn = NO;
+    
+    if(!self.isLoggedIn){
+        [self performSegueWithIdentifier:@"logInIdentifier" sender:self];
+    }
+    
     self.shoutList = [[NSMutableArray alloc] init];
     [self loadInitialData];
+    
     
     [self getCurrentLocation];
     
@@ -177,6 +197,9 @@
     cell.detailTextLabel.text = cellShout.shoutMessage;
     cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
     cell.detailTextLabel.numberOfLines = 0;
+    NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
+    int name = rand();
+    name = name % 5;
     cell.textLabel.text = @"User Name";
     cell.textLabel.font = [UIFont systemFontOfSize:15.0];
     
@@ -191,14 +214,7 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+
 
 /*
 // Override to support editing the table view.
@@ -214,21 +230,6 @@
 }
 */
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -263,7 +264,8 @@
 - (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
     //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    
+    NSLog(@"onGetShout");
+    NSLog(@"%@",data.description);
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
@@ -288,7 +290,7 @@
             newShout.phoneId = [shout objectForKey:@"phoneID"];
             newShout.shoutTime = [shout objectForKey:@"timestamp"];
             [tempList insertObject:newShout atIndex:0];
-            
+            //NSLog((@"%@", newShout.shoutMessage));
         }
         self.api.shoutList = tempList;
         [self updateList];

@@ -19,5 +19,7 @@
 @property NSString *parentId;
 @property NSString *shoutId;
 @property NSString *shoutTime;
+@property NSUInteger likeCount;
+@property NSUInteger commentCount;
 
 @end
