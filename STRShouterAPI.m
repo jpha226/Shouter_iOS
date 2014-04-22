@@ -20,7 +20,7 @@
 
 - (void) register: (NSString*) phoneID :(NSString*) first :(NSString*) last :(NSString*) regID
 {
-    NSString *path = @"/api/user/create";
+    //NSString *path = @"/api/user/create";
     
     // Start new thread and execute code
     
@@ -28,16 +28,16 @@
 
 - (void)postShout:(STRShout *)message
 {
-    NSString *path = @"/api/shout/create";
+    NSString *path = @"/api/shout/create?devKey=sh0ut3r&";
     
     // Start new thread and execute code
-    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouterapi-env.elasticbeanstalk.com/shouter"];
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
     [restCallString appendString:path];
     
     NSURL *restURL = [NSURL URLWithString:restCallString];
     NSMutableURLRequest *restRequest = [NSMutableURLRequest requestWithURL:restURL];
     
-    NSMutableString *bodyData = [[NSMutableString alloc] initWithString:@"phoneId="];
+    NSMutableString *bodyData = [[NSMutableString alloc] initWithString:@"userName="];
     
     [bodyData appendString:message.phoneId];
     [bodyData appendString:@"&message="];
@@ -76,16 +76,18 @@
 
 - (NSMutableArray*) getShout: (NSString*) latitude :(NSString*) longitude
 {
-    NSString *path = @"/api/shout/search";
+    NSString *path = @"/api/shout/search?devKey=sh0ut3r&";
     
     // Start new thread and execute search
     // Start new thread and execute code
-    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouterapi-env.elasticbeanstalk.com/shouter"];
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
     [restCallString appendString:path];
-    [restCallString appendString:@"?latitude="];
+    [restCallString appendString:@"latitude="];
     [restCallString appendString:latitude];
     [restCallString appendString:@"&longitude="];
     [restCallString appendString:longitude];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:@"blah"];
     
     NSURL *restURL = [NSURL URLWithString:restCallString];
     NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
@@ -115,16 +117,16 @@
 
 - (void) postComment: (STRShout*) message
 {
-    NSString *path = @"/api/shout/comment/create";
+    NSString *path = @"/api/shout/comment/create?devKey=sh0ut3r";
     
     // Start new thread and execute code
-    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouterapi-env.elasticbeanstalk.com/shouter"];
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
     [restCallString appendString:path];
     
     NSURL *restURL = [NSURL URLWithString:restCallString];
     NSMutableURLRequest *restRequest = [NSMutableURLRequest requestWithURL:restURL];
     
-    NSMutableString *bodyData = [[NSMutableString alloc] initWithString:@"phoneId="];
+    NSMutableString *bodyData = [[NSMutableString alloc] initWithString:@"&userName="];
     
     [bodyData appendString:message.phoneId];
     [bodyData appendString:@"&message="];
@@ -133,9 +135,10 @@
     [bodyData appendString:message.shoutLatitude];
     [bodyData appendString:@"&longitude="];
     [bodyData appendString:message.shoutLongitude];
-    [bodyData appendString:@"&parentId="];
+    [bodyData appendString:@"&shoutId="];
     [bodyData appendString:message.parentId];
-    
+    [bodyData appendString:@"&userName="];
+    [bodyData appendString:@"blah"];
     
     [restRequest setHTTPMethod:@"POST"];
     [restRequest setHTTPBody:[NSData dataWithBytes:[bodyData UTF8String] length:strlen([bodyData UTF8String])]];
@@ -162,14 +165,16 @@
 
 - (NSMutableArray*) getComment: (NSString*) parentID
 {
-    NSString *path = @"/api/shout/comment/search";
+    NSString *path = @"/api/shout/comment/search?devKey=sh0ut3r";
     
     // Start new thread and execute search
     // Start new thread and execute code
-    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouterapi-env.elasticbeanstalk.com/shouter"];
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
     [restCallString appendString:path];
-    [restCallString appendString:@"?parentId="];
+    [restCallString appendString:@"&shoutId="];
     [restCallString appendString:parentID];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:@"blah"];
     
     NSURL *restURL = [NSURL URLWithString:restCallString];
     NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
@@ -227,7 +232,6 @@
 {
     // do something with the data
     // receivedData is declared as a property elsewhere
-    //NSLog(@"Succeeded! Received %d bytes of data",[self.returnData length]);
     
     self.connection = nil;
     //self.returnData = nil;

@@ -15,8 +15,8 @@
 @property NSMutableArray *commentList;
 
 @property (nonatomic, strong) IBOutlet UILabel *headerLabel;
-@property (strong, nonatomic) IBOutlet UITextView *postCommentView;
 @property (strong, nonatomic) IBOutlet UILabel *userNameLabel;
+@property (strong, nonatomic) IBOutlet UIView *headerView;
 
 @property STRShout *headerShout;
 @property STRShouterAPI *api;

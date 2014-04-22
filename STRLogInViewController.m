@@ -7,6 +7,7 @@
 //
 
 #import "STRLogInViewController.h"
+#import "STRRegisterViewController.h"
 
 @interface STRLogInViewController ()
 
@@ -74,6 +75,20 @@
     else{
         self.logInButton.enabled = NO;
     }
+}
+
+- (IBAction)unwindToList:(UIStoryboardSegue *)segue
+{
+    UIViewController *source = [segue sourceViewController];
+    
+    if([source isKindOfClass:[STRRegisterViewController class]]){
+        
+        self.userNameField.text = ((STRRegisterViewController*)source).userName;
+        self.passWordField.text = ((STRRegisterViewController*)source).password;
+        //[self performSegueWithIdentifier:@"ExitLogIn" sender:self];
+            
+    }
+    
 }
 
 @end

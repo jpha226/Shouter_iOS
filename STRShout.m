@@ -12,5 +12,6 @@
 @implementation STRShout
 
 @synthesize shoutPoster;
+@synthesize shoutTime;
 
 @end

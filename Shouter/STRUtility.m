@@ -68,8 +68,8 @@
     
     if (currentLocation == nil) {
         NSLog(@"nil location");
-        returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",38.0373319];
-        returnShout.shoutLongitude = [NSString stringWithFormat:@"%f",95.4953778];
+        returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",100.0];//38.0373319];
+        returnShout.shoutLongitude = [NSString stringWithFormat:@"%f",100.0];//95.4953778];
     }
     else{
         returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];

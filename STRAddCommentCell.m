@@ -1,22 +1,14 @@
 //
-//  STRShoutListCell.m
+//  STRAddCommentCell.m
 //  Shouter
 //
-//  Created by Kendall Foley on 3/6/14.
+//  Created by Kendall Foley on 4/21/14.
 //  Copyright (c) 2014 Shouter. All rights reserved.
 //
 
-#import "STRShoutListCell.h"
+#import "STRAddCommentCell.h"
 
-@implementation STRShoutListCell
-
-@synthesize usernameLabel;
-@synthesize shoutTimeLabel;
-@synthesize likeButton;
-@synthesize commentButton;
-@synthesize commentCountLabel;
-@synthesize likeCountLabel;
-@synthesize shoutMessageView;
+@implementation STRAddCommentCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B03462D01905FD1700C3B7BC /* STRAddCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */; };
 		B0A1169E18C907C800902F31 /* STRLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A1169D18C907C800902F31 /* STRLogInViewController.m */; };
 		B0A3A1EB189730D000C86786 /* STRShouterAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A3A1EA189730D000C86786 /* STRShouterAPI.m */; };
 		B0A3A1EE18A97A8400C86786 /* STRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A3A1ED18A97A8400C86786 /* STRUser.m */; };
 		B0A3A1F218A9923000C86786 /* ic_launcher.png in Resources */ = {isa = PBXBuildFile; fileRef = B0A3A1F118A9923000C86786 /* ic_launcher.png */; };
 		B0A3A1FA18ADBC0100C86786 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */; };
 		B0D6E77A18C973BF00371089 /* STRShoutListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D6E77918C973BF00371089 /* STRShoutListCell.m */; };
+		B0D6E77F18CA36A100371089 /* STRRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D6E77E18CA36A100371089 /* STRRegisterViewController.m */; };
+		B0D8507918CD3FE80085E825 /* STRCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D8507818CD3FE80085E825 /* STRCommentCell.m */; };
 		D77E32861891C89600A387E4 /* STRUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D77E32851891C89600A387E4 /* STRUtility.m */; };
 		D7A68EF6188FEEB0006C0D8C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF5188FEEB0006C0D8C /* Foundation.framework */; };
 		D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */; };
@@ -44,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B03462CE1905FD1700C3B7BC /* STRAddCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRAddCommentCell.h; sourceTree = "<group>"; };
+		B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRAddCommentCell.m; sourceTree = "<group>"; };
 		B0A1169C18C907C800902F31 /* STRLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRLogInViewController.h; sourceTree = "<group>"; };
 		B0A1169D18C907C800902F31 /* STRLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRLogInViewController.m; sourceTree = "<group>"; };
 		B0A3A1E9189730D000C86786 /* STRShouterAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRShouterAPI.h; sourceTree = "<group>"; };
@@ -54,6 +59,10 @@
 		B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B0D6E77818C973BF00371089 /* STRShoutListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRShoutListCell.h; sourceTree = "<group>"; };
 		B0D6E77918C973BF00371089 /* STRShoutListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRShoutListCell.m; sourceTree = "<group>"; };
+		B0D6E77D18CA36A100371089 /* STRRegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRRegisterViewController.h; sourceTree = "<group>"; };
+		B0D6E77E18CA36A100371089 /* STRRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRRegisterViewController.m; sourceTree = "<group>"; };
+		B0D8507718CD3FE80085E825 /* STRCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRCommentCell.h; sourceTree = "<group>"; };
+		B0D8507818CD3FE80085E825 /* STRCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRCommentCell.m; sourceTree = "<group>"; };
 		D77E32841891C89600A387E4 /* STRUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRUtility.h; sourceTree = "<group>"; };
 		D77E32851891C89600A387E4 /* STRUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRUtility.m; sourceTree = "<group>"; };
 		D7A68EF2188FEEB0006C0D8C /* Shouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +127,12 @@
 				D7A68F2E18903905006C0D8C /* STRPostShoutViewController.h */,
 				D7A68F2F18903905006C0D8C /* STRPostShoutViewController.m */,
 				D7A68F26188FEF68006C0D8C /* Main.storyboard */,
+				B03462CE1905FD1700C3B7BC /* STRAddCommentCell.h */,
+				B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */,
+				B0D8507718CD3FE80085E825 /* STRCommentCell.h */,
+				B0D8507818CD3FE80085E825 /* STRCommentCell.m */,
+				B0D6E77D18CA36A100371089 /* STRRegisterViewController.h */,
+				B0D6E77E18CA36A100371089 /* STRRegisterViewController.m */,
 				B0A1169C18C907C800902F31 /* STRLogInViewController.h */,
 				B0A1169D18C907C800902F31 /* STRLogInViewController.m */,
 				D7E464AB18916DE800C19B9D /* STRCommentViewController.h */,
@@ -298,8 +313,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7A68F3018903905006C0D8C /* STRPostShoutViewController.m in Sources */,
+				B0D8507918CD3FE80085E825 /* STRCommentCell.m in Sources */,
 				D7A68F06188FEEB0006C0D8C /* STRAppDelegate.m in Sources */,
 				B0A1169E18C907C800902F31 /* STRLogInViewController.m in Sources */,
+				B0D6E77F18CA36A100371089 /* STRRegisterViewController.m in Sources */,
+				B03462D01905FD1700C3B7BC /* STRAddCommentCell.m in Sources */,
 				B0D6E77A18C973BF00371089 /* STRShoutListCell.m in Sources */,
 				D77E32861891C89600A387E4 /* STRUtility.m in Sources */,
 				D7E464AD18916DE900C19B9D /* STRCommentViewController.m in Sources */,

@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Shouter. All rights reserved.
 //
 
+#import "STRShoutListCell.h"
 #import "STRShoutListViewController.h"
 #import "STRLogInViewController.h"
 #import "STRShout.h"
@@ -13,6 +14,7 @@
 #import "STRCommentViewController.h"
 #import "STRShouterAPI.h"
 #import "STRUtility.h"
+#import "STRUser.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface STRShoutListViewController ()
@@ -39,21 +41,22 @@
 {
     UIViewController *source = [segue sourceViewController];
     
-    if([source isKindOfClass:[STRPostShoutViewController class]]){
+    if([source isKindOfClass:[STRPostShoutViewController class]]){ // Just posted a shout
     
         STRShout *newShout = ((STRPostShoutViewController*)source).createShout;
         if (newShout != nil) {
-            //[self.shoutList insertObject:newShout atIndex:0];
-            //[self.tableView reloadData];
+        
+            // Post Shout and update list
             [self.api postShout:newShout];
             [self updateList];
             
         }
     }
-    else{
+    else{ // Just came from log-in screen
+        
         self.userName = ((STRLogInViewController*)source).userName;
         self.passWord = ((STRLogInViewController*)source).passWord;
-        NSLog(@"%@",self.userName);
+        
     }
     
 }
@@ -73,33 +76,35 @@
     
 }
 
+// This function gets shouts for the current location and updates the list
 - (void) refresh
 {
     CLLocation *currentLocation = [self.locationManager location];// = [STRUtility getUpToDateLocation];
     //[self getCurrentLocation];
     NSString *lat, *lon;
     if (currentLocation == nil) {
-        NSLog(@"nil location");
-        lat = [NSString stringWithFormat:@"%f",69.0];
-        lon = [NSString stringWithFormat:@"%f",13.0];
+       
+        lat = [NSString stringWithFormat:@"%f",100.0];//38.0373319];
+        lon = [NSString stringWithFormat:@"%f",100.0 ];//95.4953778];
     }
     else{
         lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
         lon = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
+    
     [self.api getShout:lat :lon];
 }
 
 - (void) getCurrentLocation
 {
-    NSLog(@"hey");
+    
     if(self.locationManager == nil){
-        NSLog(@"in here");
+        
         self.locationManager.delegate = self;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
     
     }
     if([CLLocationManager locationServicesEnabled]){
-        NSLog(@"enabled");
+        
         [self.locationManager startUpdatingLocation];
     }
     
@@ -125,6 +130,11 @@
     }
 }
 
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -138,10 +148,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setNeedsStatusBarAppearanceUpdate];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     self.isLoggedIn = NO;
-    
+    self.passWord = @"password";
     if(!self.isLoggedIn){
-        [self performSegueWithIdentifier:@"logInIdentifier" sender:self];
+        //[self performSegueWithIdentifier:@"logInIdentifier" sender:self];
+        self.isLoggedIn = YES;
     }
     
     self.shoutList = [[NSMutableArray alloc] init];
@@ -183,9 +196,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"ListPrototypeCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+    //static NSString *CellIdentifier = @"ListPrototypeCell";
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    /*
     // Clear previous border lines
     for (CALayer *layer in cell.layer.sublayers) {
         if(layer.frame.size.height == 1.01f)
@@ -211,7 +224,37 @@
     
     [cell.layer addSublayer:bottomBorder];
     
-    return cell;
+    */
+    
+    static NSString *shoutlistCellIdentifier = @"ListPrototypeCell";
+    STRShoutListCell *customCell = (STRShoutListCell*)[tableView dequeueReusableCellWithIdentifier:shoutlistCellIdentifier];
+    STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
+    
+    if (customCell == nil) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ShoutListCell" owner:self options:nil];
+        customCell = [nib objectAtIndex:0];
+    }
+    
+    customCell.shoutMessageView.layer.cornerRadius = 5.0;
+    NSArray* names = @[@"LebronJames", @"BillyBob", @"SallySue", @"VenusWilliams", @"RandomGuy", @"JosiahHanna"];
+    NSInteger index = rand() % 6;
+    customCell.usernameLabel.text = cellShout.phoneId;
+    customCell.shoutMessageView.text = cellShout.shoutMessage;
+    NSString *like = [NSString stringWithFormat:@"%u", cellShout.likeCount];
+    customCell.likeCountLabel.text = like;
+    
+    NSInteger time = cellShout.shoutTime.intValue;
+    NSTimeInterval epochTime = [cellShout.shoutTime doubleValue];
+    NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:epochTime];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"hh:mm a"];
+    customCell.shoutTimeLabel.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
+    customCell.commentButton.tag = indexPath.row;
+    customCell.likeCountLabel.text = [NSString stringWithFormat:@"%u",cellShout.likeCount];
+    customCell.commentCountLabel.text = [NSString stringWithFormat:@"%u",cellShout.commentCount];
+    
+    return customCell;
+    
 }
 
 
@@ -236,8 +279,8 @@
     STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
     NSString *label = [cellShout shoutMessage];
     NSInteger num_lines = 1 + ([label length] / 32);
-    return 20 + num_lines * 15 - (num_lines - 1) * 4;
-    
+    //return 20 + num_lines * 35 - (num_lines - 1) * 4;
+    return 90 + num_lines;
 }
 
 
@@ -256,7 +299,16 @@
         // Pass the selected object to the new view controller.
         viewController.headerShout = [self.shoutList objectAtIndex:indexPath.row];
         
-    
+    }
+    else if([segue.identifier isEqualToString:@"buttonToCommentView"]){
+        
+        STRCommentViewController *viewController = [segue destinationViewController];
+        //NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
+        
+        // Pass the selected object to the new view controller.
+        viewController.headerShout = [self.shoutList objectAtIndex:[sender tag]];
+        
+        
     }
     
 }
@@ -264,19 +316,19 @@
 - (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
     //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"onGetShout");
-    NSLog(@"%@",data.description);
+   
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
+    
     
     if (error != nil) {
         NSLog(@"Error parsing JSON.");
     }
     else {
-        
+       
         NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
-        
+       
         NSDictionary *shout;
         
         for (int i=0; i<[shouts count]; i++) {
@@ -287,10 +339,12 @@
             newShout.shoutLatitude = [shout objectForKey:@"latitude"];
             newShout.shoutLongitude = [shout objectForKey:@"longitude"];
             newShout.shoutMessage = [shout objectForKey:@"message"];
-            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.phoneId = [shout objectForKey:@"userName"];
             newShout.shoutTime = [shout objectForKey:@"timestamp"];
-            [tempList insertObject:newShout atIndex:0];
-            //NSLog((@"%@", newShout.shoutMessage));
+            newShout.likeCount = [[shout objectForKey:@"numLikes"] integerValue];
+            newShout.commentCount = [[shout objectForKey:@"numComments"] integerValue];
+            //[tempList insertObject:newShout atIndex:0];
+            [tempList addObject:newShout];
         }
         self.api.shoutList = tempList;
         [self updateList];
@@ -322,10 +376,12 @@
             newShout.shoutLatitude = [shout objectForKey:@"latitude"];
             newShout.shoutLongitude = [shout objectForKey:@"longitude"];
             newShout.shoutMessage = [shout objectForKey:@"message"];
-            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.phoneId = [shout objectForKey:@"userName"];
             newShout.shoutTime = [shout objectForKey:@"timestamp"];
-            [tempList insertObject:newShout atIndex:0];
-            
+            newShout.likeCount = [[shout objectForKey:@"numLikes"] integerValue];
+            newShout.commentCount = [[shout objectForKey:@"numComments"] integerValue];
+            //[tempList insertObject:newShout atIndex:0];//([tempList count]-1)];
+            [tempList addObject:newShout];
         }
         self.api.shoutList = tempList;
         [self updateList];

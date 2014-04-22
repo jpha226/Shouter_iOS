@@ -10,7 +10,7 @@
 #import "STRShout.h"
 #import "STRPostShoutViewController.h"
 #import "STRShouterAPI.h"
-#import "STRPostCommentCell.m"
+#import "STRCommentCell.h"
 #import "STRUtility.h"
 
 @interface STRCommentViewController ()
@@ -22,6 +22,7 @@
 
 @synthesize headerShout;
 @synthesize commentList;
+@synthesize headerView;
 @synthesize headerLabel;
 
 - (void)loadInitialData{
@@ -48,6 +49,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.commentList = [[NSMutableArray alloc] init];
     [self loadInitialData];
     
@@ -56,22 +58,16 @@
     
     NSUInteger labelHeight = 25 + num_lines * 25 - (num_lines - 1) * 4;
     
+    self.headerView.frame = CGRectMake(0,0,self.headerView.frame.size.width, 80);
+    
+    self.headerLabel.frame = CGRectMake(0, self.userNameLabel.frame.size.height, self.headerLabel.frame.size.width, labelHeight);
     self.headerLabel.text = label;
-    UIView *headerView = [self.headerLabel superview];
-    headerView.frame = CGRectMake(0, 0, headerView.frame.size.width, labelHeight);
     self.headerLabel.lineBreakMode = NSLineBreakByWordWrapping;
     self.headerLabel.numberOfLines = 0;
-    NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
-    int name = rand();
-    name = name % 5;
-    self.userNameLabel.text = @"JosiahHanna";
-    self.headerLabel.frame = CGRectMake(0, self.userNameLabel.frame.size.height, self.headerLabel.frame.size.width, labelHeight);
+    self.headerLabel.layer.cornerRadius = 5.0;
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.userNameLabel.text = self.headerShout.phoneId;
+    
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
   
     
@@ -102,17 +98,11 @@
     
     UITableViewCell *cell;
     
+    // Post comment cell
     if(indexPath.row == [self.commentList count]){
         
         static NSString *CellIdentifier = @"postCommentCell";
         cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-        
-        // Clear previous border lines
-        //for (CALayer *layer in cell.layer.sublayers) {
-          //  if(layer.frame.size.height == 1.01f)
-            //    [layer removeFromSuperlayer];
-        //}
-        
         
         CALayer *topBorder = [CALayer layer];
         topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.01f);
@@ -130,7 +120,7 @@
         commentView.text = @"Shout back!";
         commentView.textColor = [UIColor lightGrayColor];
         [cell.contentView addSubview:commentView];
-        
+        commentView.layer.cornerRadius = 5.0;
         commentView.layer.borderWidth = 1;
         commentView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
         
@@ -139,28 +129,23 @@
     else if(indexPath.row == 0){
         
         static NSString *CellIdentifier = @"commentCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-        
-        // Clear previous border lines
-        //for (CALayer *layer in cell.layer.sublayers) {
-          //  if(layer.frame.size.height == 1.01f)
-            //    [layer removeFromSuperlayer];
-        //}
+        STRCommentCell* comCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
         
         // Configure the cell...
         STRShout *cellShout = [self.commentList objectAtIndex:([self.commentList count] - 1)];
+        cell.detailTextLabel.layer.cornerRadius = 5.0;
         cell.detailTextLabel.text = cellShout.shoutMessage;
         cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         cell.detailTextLabel.numberOfLines = 0;
-        NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
-        int name = rand();
-        name = name % 5;
+        
         cell.textLabel.text = @"User Name";
         cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-        
+        comCell.commentTextView.text = cellShout.shoutMessage;
+        comCell.usernameLabel.text = cellShout.phoneId;
+        comCell.commentTextView.layer.cornerRadius = 5.0;
         CALayer *topBorder = [CALayer layer];
         NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
-        
+        cell.detailTextLabel.layer.cornerRadius = 5.0;
         topBorder.frame = CGRectMake(0, 0, cell.frame.size.width, 1.01f);
         topBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
         [cell.layer addSublayer:topBorder];
@@ -169,14 +154,15 @@
         
         bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
         bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        [cell.layer addSublayer:bottomBorder];
+        //[cell.layer addSublayer:bottomBorder];
+        return comCell;
 
     }
     else{
         
         
         static NSString *CellIdentifier = @"commentCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        STRCommentCell* comCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
         // Clear previous border lines
         for (CALayer *layer in cell.layer.sublayers) {
@@ -187,14 +173,17 @@
         // Configure the cell...
         NSUInteger commentCount = [self.commentList count];
         STRShout *cellShout = [self.commentList objectAtIndex:(commentCount - indexPath.row - 1)];
+        cell.detailTextLabel.layer.cornerRadius = 5.0;
         cell.detailTextLabel.text = cellShout.shoutMessage;
         cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
         cell.detailTextLabel.numberOfLines = 0;
-        NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
-        int name = rand();
-        name = name % 5;
+        cell.detailTextLabel.layer.cornerRadius = 5.0;
         cell.textLabel.text = @"User Name";
         cell.textLabel.font = [UIFont systemFontOfSize:15.0];
+        
+        comCell.commentTextView.text = cellShout.shoutMessage;
+        comCell.usernameLabel.text = cellShout.phoneId;
+        comCell.commentTextView.layer.cornerRadius = 5.0;
         
         CALayer *bottomBorder = [CALayer layer];
         NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
@@ -202,7 +191,7 @@
         bottomBorder.frame = CGRectMake(0.0f, 25 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
         bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
         [cell.layer addSublayer:bottomBorder];
-    
+        return comCell;
     }
     
     return cell;
@@ -237,7 +226,7 @@
     UIButton *shoutBack = (UIButton*)sender;
     UIView *cell = (UIView*)shoutBack.superview;
     UITextView *comment = (UITextView*)[cell viewWithTag:22];
-    NSLog(@"comment: %@",comment.description);
+    
     
     if(comment.text.length > 0 && comment.text.length <= 141){
         
@@ -272,7 +261,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == self.commentList.count) {
-        return 75;
+        return 65;
     }
     else{
         NSUInteger commentCount = [self.commentList count];
@@ -280,8 +269,8 @@
         NSString *label = [cellShout shoutMessage];
         NSInteger num_lines = 1 + ([label length] / 32);
         
-        return 25 + num_lines * 15 - (num_lines - 1) * 4;
-    
+        //return 25 + num_lines * 15 - (num_lines - 1) * 4;
+        return 80;
     }
 }
 
@@ -361,7 +350,6 @@
         UINavigationItem *navBar = self.navigationItem;
         navBar.title = [NSString stringWithFormat:@"%d",141 - textLength];
         
-        
     }
     else if(textLength == 0){
         
@@ -375,7 +363,7 @@
 - (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
     NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSLog(@"onGetSR: %@",response);
+    //NSLog(@"onGetSR: %@",response);
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
@@ -385,22 +373,24 @@
     }
     else {
         
-        NSArray* shouts = [jsonDict objectForKey:@"comments"]; //2
-        //NSLog(@"shouts: %@", shouts);
+        NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
+        
+        NSArray* comments = [[shouts objectAtIndex:0] objectForKey:@"comments"];
+       // NSLog(@"%@", comments[0]);
+        
         NSDictionary *shout;
         
-        for (int i=0; i<[shouts count]; i++) {
+        for (int i=0; i<[comments count]; i++) {
             
-            shout = [shouts objectAtIndex:i];
+            shout = [comments objectAtIndex:i];
             STRShout *newShout = [[STRShout alloc] init];
             newShout.shoutId = [shout objectForKey:@"id"];
-            newShout.shoutLatitude = [shout objectForKey:@"latitude"];
-            newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+            //newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+            //newShout.shoutLongitude = [shout objectForKey:@"longitude"];
             newShout.shoutMessage = [shout objectForKey:@"message"];
-            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.phoneId = [shout objectForKey:@"userName"];
             newShout.shoutTime = [shout objectForKey:@"timestamp"];
             [tempList insertObject:newShout atIndex:0];
-            
         }
         self.api.shoutList = tempList;
         [self updateList];
@@ -420,8 +410,9 @@
     }
     else {
         
-        NSArray* shouts = [jsonDict objectForKey:@"comments"]; //2
-        //NSLog(@"shouts: %@", shouts);
+        NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
+        
+        NSArray* comments = [[shouts objectAtIndex:0] objectForKey:@"comments"];
         NSDictionary *shout;
         
         for (int i=0; i<[shouts count]; i++) {
@@ -432,7 +423,7 @@
             newShout.shoutLatitude = [shout objectForKey:@"latitude"];
             newShout.shoutLongitude = [shout objectForKey:@"longitude"];
             newShout.shoutMessage = [shout objectForKey:@"message"];
-            newShout.phoneId = [shout objectForKey:@"phoneID"];
+            newShout.phoneId = [shout objectForKey:@"userName"];
             newShout.shoutTime = [shout objectForKey:@"timestamp"];
             [tempList insertObject:newShout atIndex:0];
             

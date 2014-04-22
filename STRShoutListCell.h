@@ -10,4 +10,13 @@
 
 @interface STRShoutListCell : UITableViewCell
 
+@property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
+@property (strong, nonatomic) IBOutlet UITextView *shoutMessageView;
+@property (strong, nonatomic) IBOutlet UIButton *commentButton;
+@property (strong, nonatomic) IBOutlet UILabel *commentCountLabel;
+@property (strong, nonatomic) IBOutlet UIButton *likeButton;
+@property (strong, nonatomic) IBOutlet UILabel *likeCountLabel;
+@property (strong, nonatomic) IBOutlet UILabel *shoutTimeLabel;
+
+
 @end

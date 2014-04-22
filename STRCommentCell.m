@@ -1,16 +1,14 @@
 //
-//  STRPostCommentCell.m
+//  STRCommentCell.m
 //  Shouter
 //
-//  Created by Kendall Foley on 2/12/14.
+//  Created by Kendall Foley on 3/9/14.
 //  Copyright (c) 2014 Shouter. All rights reserved.
 //
 
-#import "STRPostCommentCell.h"
+#import "STRCommentCell.h"
 
-@implementation STRPostCommentCell
-
-@synthesize inputText, postComment;
+@implementation STRCommentCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
