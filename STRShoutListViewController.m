@@ -160,8 +160,10 @@
     self.shoutList = [[NSMutableArray alloc] init];
     [self loadInitialData];
     
-    
+    //[self.tableView registerClass:[STRShoutListCell class] forCellReuseIdentifier:@"ListPrototypeCell"];
     [self getCurrentLocation];
+    
+    //[self.tableView registerNib:[UINib nibWithNibName:@"ShoutListCell" bundle:nil] forCellReuseIdentifier:@"ListPrototypeCell"];
     
     UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
@@ -196,58 +198,38 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //static NSString *CellIdentifier = @"ListPrototypeCell";
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    /*
-    // Clear previous border lines
-    for (CALayer *layer in cell.layer.sublayers) {
-        if(layer.frame.size.height == 1.01f)
-            [layer removeFromSuperlayer];
-    }
     
-    // Configure the cell...
-    STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
-    cell.detailTextLabel.text = cellShout.shoutMessage;
-    cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    cell.detailTextLabel.numberOfLines = 0;
-    NSArray *names = @[@"JosiahHanna", @"Charlie", @"Craig", @"wildcat8", @"LebronJames"];
-    int name = rand();
-    name = name % 5;
-    cell.textLabel.text = @"User Name";
-    cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-    
-    CALayer *bottomBorder = [CALayer layer];
-    NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
-    
-    bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
-    bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-    
-    [cell.layer addSublayer:bottomBorder];
-    
-    */
+   
     
     static NSString *shoutlistCellIdentifier = @"ListPrototypeCell";
     STRShoutListCell *customCell = (STRShoutListCell*)[tableView dequeueReusableCellWithIdentifier:shoutlistCellIdentifier];
     STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
-    
+    customCell.cellShout = cellShout;
     if (customCell == nil) {
+        
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"ShoutListCell" owner:self options:nil];
         customCell = [nib objectAtIndex:0];
+       
     }
-    
+    [customCell initCell];
     customCell.shoutMessageView.layer.cornerRadius = 5.0;
-    NSArray* names = @[@"LebronJames", @"BillyBob", @"SallySue", @"VenusWilliams", @"RandomGuy", @"JosiahHanna"];
-    NSInteger index = rand() % 6;
+    
     customCell.usernameLabel.text = cellShout.phoneId;
+    
+    // Format text area of cell
     customCell.shoutMessageView.text = cellShout.shoutMessage;
+    NSString *label = [cellShout shoutMessage];
+    NSInteger num_lines = 1 + ([label length] / 32);
+    customCell.shoutMessageView.frame = CGRectMake(customCell.shoutMessageView.frame.origin.x, customCell.shoutMessageView.frame.origin.y, customCell.shoutMessageView.frame.size.width, 35 + num_lines*15);
+    
     NSString *like = [NSString stringWithFormat:@"%u", cellShout.likeCount];
     customCell.likeCountLabel.text = like;
     
-    NSInteger time = cellShout.shoutTime.intValue;
     NSTimeInterval epochTime = [cellShout.shoutTime doubleValue];
     NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:epochTime];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"hh:mm a"];
+    
     customCell.shoutTimeLabel.text = [NSString stringWithFormat:@"%@",[dateFormatter stringFromDate:date]];
     customCell.commentButton.tag = indexPath.row;
     customCell.likeCountLabel.text = [NSString stringWithFormat:@"%u",cellShout.likeCount];
@@ -257,34 +239,14 @@
     
 }
 
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     STRShout *cellShout = [self.shoutList objectAtIndex:indexPath.row];
     NSString *label = [cellShout shoutMessage];
     NSInteger num_lines = 1 + ([label length] / 32);
-    //return 20 + num_lines * 35 - (num_lines - 1) * 4;
-    return 90 + num_lines;
+    
+    return 60 + num_lines * 15;
 }
-
-
-
 
 #pragma mark - Navigation
 
@@ -315,8 +277,7 @@
 
 - (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
-    //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-   
+    
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
@@ -389,14 +350,28 @@
 }
 
 
-- (void) onRegistrationReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception
+- (void) onRegistrationReturn:(STRShouterAPI*)api :(NSData*)result :(NSException*)exception
 {
+    
+}
+
+- (void) onUpdateUserReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
+    
+}
+- (void) onUserAuthenticateReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
+    
+}
+- (void) onUserBlockReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
+    
+}
+- (void) onUserUnBlockReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
     
 }
 
 - (void) updateList
 {
     self.shoutList = self.api.shoutList;
+    [self.tableView reloadData];
     [self.tableView reloadData];
 }
 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		B03462D01905FD1700C3B7BC /* STRAddCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */; };
+		B03462D21908B68400C3B7BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03462D11908B68400C3B7BC /* QuartzCore.framework */; };
+		B03462D41908CC8000C3B7BC /* ShoutListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B03462D31908CC8000C3B7BC /* ShoutListCell.xib */; };
 		B0A1169E18C907C800902F31 /* STRLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A1169D18C907C800902F31 /* STRLogInViewController.m */; };
 		B0A3A1EB189730D000C86786 /* STRShouterAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A3A1EA189730D000C86786 /* STRShouterAPI.m */; };
 		B0A3A1EE18A97A8400C86786 /* STRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A3A1ED18A97A8400C86786 /* STRUser.m */; };
@@ -49,6 +51,8 @@
 /* Begin PBXFileReference section */
 		B03462CE1905FD1700C3B7BC /* STRAddCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRAddCommentCell.h; sourceTree = "<group>"; };
 		B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRAddCommentCell.m; sourceTree = "<group>"; };
+		B03462D11908B68400C3B7BC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B03462D31908CC8000C3B7BC /* ShoutListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShoutListCell.xib; sourceTree = "<group>"; };
 		B0A1169C18C907C800902F31 /* STRLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRLogInViewController.h; sourceTree = "<group>"; };
 		B0A1169D18C907C800902F31 /* STRLogInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRLogInViewController.m; sourceTree = "<group>"; };
 		B0A3A1E9189730D000C86786 /* STRShouterAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRShouterAPI.h; sourceTree = "<group>"; };
@@ -97,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B03462D21908B68400C3B7BC /* QuartzCore.framework in Frameworks */,
 				B0A3A1FA18ADBC0100C86786 /* CoreLocation.framework in Frameworks */,
 				D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */,
 				D7A68EFA188FEEB0006C0D8C /* UIKit.framework in Frameworks */,
@@ -120,6 +125,7 @@
 		D7A68EE9188FEEB0006C0D8C = {
 			isa = PBXGroup;
 			children = (
+				B03462D31908CC8000C3B7BC /* ShoutListCell.xib */,
 				D7A68F31189080D6006C0D8C /* STRShout.h */,
 				B0D6E77818C973BF00371089 /* STRShoutListCell.h */,
 				B0D6E77918C973BF00371089 /* STRShoutListCell.m */,
@@ -162,6 +168,7 @@
 		D7A68EF4188FEEB0006C0D8C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B03462D11908B68400C3B7BC /* QuartzCore.framework */,
 				B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */,
 				D7A68EF5188FEEB0006C0D8C /* Foundation.framework */,
 				D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */,
@@ -290,6 +297,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B03462D41908CC8000C3B7BC /* ShoutListCell.xib in Resources */,
 				D7A68F27188FEF68006C0D8C /* Main.storyboard in Resources */,
 				D7A68F00188FEEB0006C0D8C /* InfoPlist.strings in Resources */,
 				D7A68F08188FEEB0006C0D8C /* Images.xcassets in Resources */,

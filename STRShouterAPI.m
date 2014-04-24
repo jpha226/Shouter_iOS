@@ -18,11 +18,41 @@
     self.delegate = d;
 }*/
 
-- (void) register: (NSString*) phoneID :(NSString*) first :(NSString*) last :(NSString*) regID
+- (void) registerUser: (NSString*) userName :(NSString*) password :(NSString*) passwordConfirm
 {
-    //NSString *path = @"/api/user/create";
+    NSString *path = @"/api/user/create?devKey=sh0ut3r";
     
+    // Start new thread and execute search
     // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    [restCallString appendString:@"password="];
+    [restCallString appendString:password];
+    [restCallString appendString:@"&passwordConfirm="];
+    [restCallString appendString:passwordConfirm];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+            
+            [self.delegate onRegistrationReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
     
 }
 
@@ -201,6 +231,219 @@
     //[self.delegate onGetShoutReturn:self :self.returnData :nil];
     
     return self.shoutList;
+}
+
+- (void) likeShout: (NSString*) userName :(NSString*) shoutID{
+    
+    NSString *path = @"/api/shout/like?devKey=sh0ut3r";
+    
+    // Start new thread and execute search
+    // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&shoutId="];
+    [restCallString appendString:shoutID];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+           
+            [self.delegate onShoutLikeReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
+    
+}
+- (void) unLikeShout: (NSString*) userName :(NSString*) shoutID{
+    
+    NSString *path = @"/api/shout/unlike?devKey=sh0ut3r";
+    
+    // Start new thread and execute search
+    // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&shoutId="];
+    [restCallString appendString:shoutID];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            [self.delegate onGetCommentReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
+    
+}
+- (void) upadateUser: (NSString*) userName{
+    
+    NSString *path = @"/api/user/update?devKey=sh0ut3r";
+    
+    // Start new thread and execute search
+    // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            [self.delegate onGetCommentReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
+    
+}
+- (void) userAuthenticate: (NSString*) userName :(NSString*) passWord{
+    
+    NSString *path = @"/api/user/authenticate?devKey=sh0ut3r";
+    
+    // Start new thread and execute search
+    // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&password="];
+    [restCallString appendString:passWord];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            [self.delegate onGetCommentReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
+    
+}
+- (void) userBlock: (NSString*) userName :(NSString*) blockedUserName{
+    
+    NSString *path = @"/api/user/block?devKey=sh0ut3r";
+    
+    // Start new thread and execute search
+    // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&blockedUserName="];
+    [restCallString appendString:blockedUserName];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            [self.delegate onGetCommentReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
+    
+}
+- (void) userUnBlock: (NSString*) userName :(NSString*) blockedUserName{
+    
+    NSString *path = @"/api/user/unblock?devKey=sh0ut3r";
+    
+    // Start new thread and execute search
+    // Start new thread and execute code
+    NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
+    [restCallString appendString:path];
+    [restCallString appendString:@"&blockedUserName="];
+    [restCallString appendString:blockedUserName];
+    [restCallString appendString:@"&userName="];
+    [restCallString appendString:userName];
+    
+    NSURL *restURL = [NSURL URLWithString:restCallString];
+    NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+    
+    self.returnData = [NSMutableData dataWithCapacity:0];
+    
+    //self.connection = [[NSURLConnection alloc] initWithRequest:restRequest delegate:self];
+    [NSURLConnection sendAsynchronousRequest:restRequest queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectonError){
+        
+        if(data.length > 0 && connectonError == nil)
+        {
+            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            
+            [self.delegate onGetCommentReturn:self :data :nil];
+            
+        }
+        
+    }];
+    
+    if(!self.connection){
+        self.returnData = nil;
+    }
+    
 }
 
 
