@@ -13,6 +13,7 @@
 @interface STRPostShoutViewController : UIViewController <UITextViewDelegate>
 
 @property STRShout *createShout;
+@property NSString *message;
 @property (strong, nonatomic) IBOutlet UITextView *textView;
 
 

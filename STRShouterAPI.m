@@ -28,7 +28,7 @@
     [restCallString appendString:path];
     [restCallString appendString:@"&userName="];
     [restCallString appendString:userName];
-    [restCallString appendString:@"password="];
+    [restCallString appendString:@"&password="];
     [restCallString appendString:password];
     [restCallString appendString:@"&passwordConfirm="];
     [restCallString appendString:passwordConfirm];
@@ -59,7 +59,7 @@
 - (void)postShout:(STRShout *)message
 {
     NSString *path = @"/api/shout/create?devKey=sh0ut3r&";
-    
+    NSLog(@"post shout lat: %@",message.shoutLatitude);
     // Start new thread and execute code
     NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
     [restCallString appendString:path];
@@ -69,7 +69,7 @@
     
     NSMutableString *bodyData = [[NSMutableString alloc] initWithString:@"userName="];
     
-    [bodyData appendString:message.phoneId];
+    [bodyData appendString:message.shoutUserName];
     [bodyData appendString:@"&message="];
     [bodyData appendString:message.shoutMessage];
     [bodyData appendString:@"&latitude="];
@@ -96,7 +96,7 @@
         if(data.length > 0 && connectonError == nil)
         {
             
-            [self.delegate onPostShoutReturn:self :self.returnData :nil];
+            [self.delegate onPostShoutReturn:self :data :nil];
             
         }
     }];
@@ -104,10 +104,10 @@
     
 }
 
-- (NSMutableArray*) getShout: (NSString*) latitude :(NSString*) longitude
+- (NSMutableArray*) getShout: (NSString*) userName :(NSString*) latitude :(NSString*) longitude
 {
     NSString *path = @"/api/shout/search?devKey=sh0ut3r&";
-    
+   NSLog(@"get shout lat: %@",latitude);
     // Start new thread and execute search
     // Start new thread and execute code
     NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
@@ -117,7 +117,7 @@
     [restCallString appendString:@"&longitude="];
     [restCallString appendString:longitude];
     [restCallString appendString:@"&userName="];
-    [restCallString appendString:@"blah"];
+    [restCallString appendString:userName];
     
     NSURL *restURL = [NSURL URLWithString:restCallString];
     NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
@@ -129,8 +129,7 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-           
+          
             [self.delegate onGetShoutReturn:self :data :nil];
             
         }
@@ -139,8 +138,6 @@
     if(!self.connection){
         self.returnData = nil;
     }
-    
-    //[self.delegate onGetShoutReturn:self :self.returnData :nil];
     
     return self.shoutList;
 }
@@ -158,17 +155,12 @@
     
     NSMutableString *bodyData = [[NSMutableString alloc] initWithString:@"&userName="];
     
-    [bodyData appendString:message.phoneId];
+    [bodyData appendString:message.shoutUserName];
     [bodyData appendString:@"&message="];
     [bodyData appendString:message.shoutMessage];
-    [bodyData appendString:@"&latitude="];
-    [bodyData appendString:message.shoutLatitude];
-    [bodyData appendString:@"&longitude="];
-    [bodyData appendString:message.shoutLongitude];
     [bodyData appendString:@"&shoutId="];
     [bodyData appendString:message.parentId];
-    [bodyData appendString:@"&userName="];
-    [bodyData appendString:@"blah"];
+    
     
     [restRequest setHTTPMethod:@"POST"];
     [restRequest setHTTPBody:[NSData dataWithBytes:[bodyData UTF8String] length:strlen([bodyData UTF8String])]];
@@ -185,7 +177,6 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             
             [self.delegate onPostCommentReturn:self :data :nil];
         }
@@ -193,7 +184,7 @@
     
 }
 
-- (NSMutableArray*) getComment: (NSString*) parentID
+- (NSMutableArray*) getComment: (NSString*) userName :(NSString*) parentID
 {
     NSString *path = @"/api/shout/comment/search?devKey=sh0ut3r";
     
@@ -204,7 +195,7 @@
     [restCallString appendString:@"&shoutId="];
     [restCallString appendString:parentID];
     [restCallString appendString:@"&userName="];
-    [restCallString appendString:@"blah"];
+    [restCallString appendString:userName];
     
     NSURL *restURL = [NSURL URLWithString:restCallString];
     NSURLRequest *restRequest =[NSURLRequest requestWithURL:restURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
@@ -216,7 +207,6 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
            
             [self.delegate onGetCommentReturn:self :data :nil];
             
@@ -227,8 +217,6 @@
     if(!self.connection){
         self.returnData = nil;
     }
-    
-    //[self.delegate onGetShoutReturn:self :self.returnData :nil];
     
     return self.shoutList;
 }
@@ -290,9 +278,8 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             
-            [self.delegate onGetCommentReturn:self :data :nil];
+            [self.delegate onShoutUnLikeReturn:self :data :nil];
             
         }
         
@@ -324,9 +311,7 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            
-            [self.delegate onGetCommentReturn:self :data :nil];
+            [self.delegate onUpdateUserReturn:self :data :nil];
             
         }
         
@@ -338,9 +323,9 @@
     
 }
 - (void) userAuthenticate: (NSString*) userName :(NSString*) passWord{
-    
+    NSLog(@"authy");
     NSString *path = @"/api/user/authenticate?devKey=sh0ut3r";
-    
+    NSLog(@"authenticate");
     // Start new thread and execute search
     // Start new thread and execute code
     NSMutableString *restCallString = [[NSMutableString alloc] initWithString:@"http://shouter-dev.elasticbeanstalk.com"];
@@ -360,9 +345,8 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             
-            [self.delegate onGetCommentReturn:self :data :nil];
+            [self.delegate onUserAuthenticateReturn:self :data :nil];
             
         }
         
@@ -396,9 +380,8 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             
-            [self.delegate onGetCommentReturn:self :data :nil];
+            [self.delegate onUserBlockReturn:self :data :nil];
             
         }
         
@@ -432,9 +415,8 @@
         
         if(data.length > 0 && connectonError == nil)
         {
-            //NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             
-            [self.delegate onGetCommentReturn:self :data :nil];
+            [self.delegate onUserUnBlockReturn:self :data :nil];
             
         }
         
@@ -473,11 +455,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    // do something with the data
-    // receivedData is declared as a property elsewhere
-    
     self.connection = nil;
-    //self.returnData = nil;
 }
 
 @end

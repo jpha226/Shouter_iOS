@@ -8,10 +8,12 @@
 
 #import "STRCommentViewController.h"
 #import "STRShout.h"
+#import "STRShoutListViewController.h"
 #import "STRPostShoutViewController.h"
 #import "STRShouterAPI.h"
 #import "STRCommentCell.h"
 #import "STRUtility.h"
+#import "global.h"
 
 @interface STRCommentViewController ()
 
@@ -22,8 +24,12 @@
 
 @synthesize headerShout;
 @synthesize commentList;
+@synthesize blockedUsers;
 @synthesize headerView;
-@synthesize headerLabel;
+@synthesize headerShoutTextView;
+@synthesize commentButton;
+@synthesize commentTextField;
+@synthesize locationManager;
 
 - (void)loadInitialData{
     
@@ -34,14 +40,15 @@
 
 - (void) refresh
 {
-    [self.api getComment:headerShout.shoutId];
+    if(applicationUserName != nil)
+        [self.api getComment:applicationUserName :headerShout.shoutId];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
-    self = [super initWithStyle:style];
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        // Custom initialization
+        self.tableView.tableHeaderView = self.headerView;
     }
     return self;
 }
@@ -49,27 +56,55 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"loading view");
     
+    UIImageView *tempImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"shouter1small.jpg"]];
+    [tempImageView setFrame:self.tableView.frame];
+    
+    self.tableView.backgroundView = tempImageView;
+    
+    
+    //self.tableView.tableHeaderView = self.headerView;
     self.commentList = [[NSMutableArray alloc] init];
     [self loadInitialData];
     
-    NSString *label = [self.headerShout shoutMessage];
-    NSInteger num_lines = 1 + ([label length] / 35);
+    self.headerShoutTextView.text = headerShout.shoutMessage;
+    CGRect frame = self.headerShoutTextView.frame;
+    frame.size.height = self.headerShoutTextView.contentSize.height;
+    self.headerShoutTextView.frame = frame;
+    self.headerShoutTextView.layer.cornerRadius = 5.0;
     
-    NSUInteger labelHeight = 25 + num_lines * 25 - (num_lines - 1) * 4;
+    self.userNameLabel.text = self.headerShout.shoutUserName;
     
-    self.headerView.frame = CGRectMake(0,0,self.headerView.frame.size.width, 80);
+    CGRect headerFrame = self.headerView.frame;
+    headerFrame.size.height = frame.size.height + 50.0;
+    self.headerView.frame = headerFrame;
     
-    self.headerLabel.frame = CGRectMake(0, self.userNameLabel.frame.size.height, self.headerLabel.frame.size.width, labelHeight);
-    self.headerLabel.text = label;
-    self.headerLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.headerLabel.numberOfLines = 0;
-    self.headerLabel.layer.cornerRadius = 5.0;
     
-    self.userNameLabel.text = self.headerShout.phoneId;
-    
+    UIRefreshControl *refresh = [[UIRefreshControl alloc] init];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    [refresh addTarget:self
+                action:@selector(refreshView:)
+      forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = refresh;
+
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
   
+    
+}
+
+- (void)refreshView: (UIRefreshControl *) refresh {
+    
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Refreshing Shouts..."];
+    
+    // Refresh code goes here
+    [self refresh];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM d, h:mm a"];
+    NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@",[formatter stringFromDate:[NSDate date]]];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
+    [refresh endRefreshing];
     
 }
 
@@ -90,231 +125,152 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return [self.commentList count] + 1;
+    return [self.commentList count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    UITableViewCell *cell;
+    static NSString *CellIdentifier = @"commentCell";
+    STRCommentCell* comCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Post comment cell
-    if(indexPath.row == [self.commentList count]){
+    if(comCell == nil){
         
-        static NSString *CellIdentifier = @"postCommentCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-        
-        CALayer *topBorder = [CALayer layer];
-        topBorder.frame = CGRectMake(0.0f, 0.0f, cell.frame.size.width, 1.01f);
-        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        [cell.layer addSublayer:topBorder];
-        
-        CALayer *bottomBorder = [CALayer layer];
-        bottomBorder.frame = CGRectMake(0.0f, 75, cell.frame.size.width, 1.01f);
-        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        [cell.layer addSublayer:bottomBorder];
-        
-        UITextView *commentView = [[UITextView alloc] initWithFrame:CGRectMake(5, 5, cell.frame.size.width - 10, cell.frame.size.height - 35)];
-        commentView.delegate = self;
-        commentView.tag = 22;
-        commentView.text = @"Shout back!";
-        commentView.textColor = [UIColor lightGrayColor];
-        [cell.contentView addSubview:commentView];
-        commentView.layer.cornerRadius = 5.0;
-        commentView.layer.borderWidth = 1;
-        commentView.layer.borderColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        
+        comCell = [[STRCommentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
     }
-    else if(indexPath.row == 0){
+    
+    // Configure the cell...
+    NSUInteger commentCount = [self.commentList count];
+    STRShout *cellShout = [self.commentList objectAtIndex:indexPath.row];//(commentCount - indexPath.row - 1)];
+    comCell.cellShout = cellShout;
         
-        static NSString *CellIdentifier = @"commentCell";
-        STRCommentCell* comCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-        
-        // Configure the cell...
-        STRShout *cellShout = [self.commentList objectAtIndex:([self.commentList count] - 1)];
-        cell.detailTextLabel.layer.cornerRadius = 5.0;
-        cell.detailTextLabel.text = cellShout.shoutMessage;
-        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        cell.detailTextLabel.numberOfLines = 0;
-        
-        cell.textLabel.text = @"User Name";
-        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-        comCell.commentTextView.text = cellShout.shoutMessage;
-        comCell.usernameLabel.text = cellShout.phoneId;
-        comCell.commentTextView.layer.cornerRadius = 5.0;
-        CALayer *topBorder = [CALayer layer];
-        NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
-        cell.detailTextLabel.layer.cornerRadius = 5.0;
-        topBorder.frame = CGRectMake(0, 0, cell.frame.size.width, 1.01f);
-        topBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        [cell.layer addSublayer:topBorder];
-        
-        CALayer *bottomBorder = [CALayer layer];
-        
-        bottomBorder.frame = CGRectMake(0.0f, 20 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
-        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        //[cell.layer addSublayer:bottomBorder];
-        return comCell;
+    comCell.commentTextView.text = cellShout.shoutMessage;
+    comCell.usernameLabel.text = cellShout.shoutUserName;
+    comCell.commentTextView.layer.cornerRadius = 5.0;
+    CGRect frame = comCell.commentTextView.frame;
+    frame.size.height = comCell.commentTextView.contentSize.height;
+    comCell.commentTextView.frame = frame;
+    
+   
+    comCell.commentTextView.layer.borderWidth = 2.0f;
+    comCell.commentTextView.layer.borderColor = [[UIColor blueColor] CGColor];
+    
+    // Like button
+    comCell.likeCountLabel.text = [NSString stringWithFormat:@"%u",cellShout.likeCount];
+    
+    // Shout post time
+    NSTimeInterval epochTime = [cellShout.shoutTime doubleValue];
+    NSDate* date = [[NSDate alloc] initWithTimeIntervalSince1970:epochTime];
+    NSDate* currentDate = [[NSDate alloc] init];
+    NSTimeInterval distanceBetweenTimes = [currentDate timeIntervalSinceDate:date];
+    NSInteger elapsedTime = distanceBetweenTimes;
+    NSString *timeString;
+    if(elapsedTime < 60)
+        timeString = [NSString stringWithFormat:@"%d s ago", elapsedTime];
+    else if(distanceBetweenTimes < 3600)
+        timeString = [NSString stringWithFormat:@"%d m ago", elapsedTime / 60];
+    else if(elapsedTime < 3600 * 24)
+        timeString = [NSString stringWithFormat:@"%d h ago", elapsedTime / 3600];
+    else
+        timeString = [NSString stringWithFormat:@"%d d ago", elapsedTime / 3600 / 24];
+    comCell.commentTimeLabel.text = timeString;
+    
+    // Deprecated for adding borders to cells vvvvvv
+    //CALayer *bottomBorder = [CALayer layer];
+    //NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
+    //bottomBorder.frame = CGRectMake(0.0f, 25 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
+    //bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
+    //[cell.layer addSublayer:bottomBorder];
+    return comCell;
 
-    }
-    else{
-        
-        
-        static NSString *CellIdentifier = @"commentCell";
-        STRCommentCell* comCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
-        // Clear previous border lines
-        for (CALayer *layer in cell.layer.sublayers) {
-            if(layer.frame.size.height == 1.01f)
-                [layer removeFromSuperlayer];
-        }
-        
-        // Configure the cell...
-        NSUInteger commentCount = [self.commentList count];
-        STRShout *cellShout = [self.commentList objectAtIndex:(commentCount - indexPath.row - 1)];
-        cell.detailTextLabel.layer.cornerRadius = 5.0;
-        cell.detailTextLabel.text = cellShout.shoutMessage;
-        cell.detailTextLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        cell.detailTextLabel.numberOfLines = 0;
-        cell.detailTextLabel.layer.cornerRadius = 5.0;
-        cell.textLabel.text = @"User Name";
-        cell.textLabel.font = [UIFont systemFontOfSize:15.0];
-        
-        comCell.commentTextView.text = cellShout.shoutMessage;
-        comCell.usernameLabel.text = cellShout.phoneId;
-        comCell.commentTextView.layer.cornerRadius = 5.0;
-        
-        CALayer *bottomBorder = [CALayer layer];
-        NSInteger num_lines = 1 + ([cellShout.shoutMessage length] / 32);
-        
-        bottomBorder.frame = CGRectMake(0.0f, 25 + num_lines * 15 - (num_lines - 1) * 4, cell.frame.size.width, 1.01f);
-        bottomBorder.backgroundColor = [UIColor colorWithWhite:0.8f alpha:1.0f].CGColor;
-        [cell.layer addSublayer:bottomBorder];
-        return comCell;
-    }
-    
-    return cell;
 }
 
-/*
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell;
+
+- (IBAction)clickedCommentButton:(id)sender {
     
-    if(indexPath.row == [self.commentList count]){
-        
-        
-    }
-    else{
-        
-        static NSString *CellIdentifier = @"commentCell";
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-        
-        // Configure the cell...
-        int shoutCount = [self.commentList count] - 1;
-        STRShout *cellShout = [self.commentList objectAtIndex:(shoutCount - indexPath.row)];
-        cell.textLabel.text = cellShout.shoutMessage;
-    }
-    
-    [self.tableView reloadData];
-    [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
- */
-- (IBAction)clickedShoutBack:(id)sender {
-    
-    UIButton *shoutBack = (UIButton*)sender;
-    UIView *cell = (UIView*)shoutBack.superview;
-    UITextView *comment = (UITextView*)[cell viewWithTag:22];
+    NSString* commentText = self.commentTextField.text;
     
     
-    if(comment.text.length > 0 && comment.text.length <= 141){
+    if(commentText.length > 0 && commentText.length <= 141){
+        [self startUpdatingCurrentLocation];
+        CLLocation *currentLocation = [locationManager location];
+        STRShout *newComment = [STRUtility prepareShoutResponse:commentText];
         
-        STRShout *newComment = [STRUtility prepareShoutResponse:comment.text];
         
         if (newComment != nil) {
             
             if(self.headerShout.shoutId != nil){
                 
                 newComment.parentId = self.headerShout.shoutId;
+                newComment.shoutUserName = applicationUserName;
+                
+                NSString *lat, *lon;
+                if (currentLocation == nil) {
+                    
+                    lat = [NSString stringWithFormat:@"%f", 38.0373319];
+                    lon = [NSString stringWithFormat:@"%f", 95.4953778];
+                }
+                else{
+                    
+                    lat = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
+                    lon = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
+                
+                newComment.shoutLatitude = lat;
+                newComment.shoutLongitude = lon;
                 
             }
-            
+            NSLog(@"%@",applicationUserName);
             [self.api postComment:newComment];
+            [self.commentTextField endEditing:YES];
         }
 
         
     }
-    comment.text = @"";
+    self.commentTextField.text = @"";
     
 }
 
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == self.commentList.count) {
-        return YES;
-    }
-    return NO;
-}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == self.commentList.count) {
-        return 65;
-    }
-    else{
-        NSUInteger commentCount = [self.commentList count];
-        STRShout *cellShout = [self.commentList objectAtIndex:(commentCount - indexPath.row - 1)];
-        NSString *label = [cellShout shoutMessage];
-        NSInteger num_lines = 1 + ([label length] / 32);
-        
-        //return 25 + num_lines * 15 - (num_lines - 1) * 4;
-        return 80;
-    }
+    STRShout *cellShout = [self.commentList objectAtIndex:indexPath.row];
+    NSString *label = [cellShout shoutMessage];
+    NSInteger num_lines = 1 + ([label length] / 47);
+    
+    // 1 line = 33
+    // 2 lines = 50
+    // 3 lines = 67
+    // 4 lines = 83
+    
+    return 50 + num_lines * 27;
+    
 }
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
+    // Return YES - we will be able to delete all rows
     return YES;
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    // Perform the real delete action here. Note: you may need to check editing style
+    //   if you do not perform delete only.
+    STRShout *cellShout = [self.commentList objectAtIndex:([self.commentList count] - indexPath.row - 1)];
+    
+    [self.api userBlock:applicationUserName :cellShout.shoutUserName];
+    [blockedUsers addObject:cellShout.shoutUserName];
+    [self refresh];
+    
+    NSLog(@"User Blocked");
 }
 
- */
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"Block User";
+}
+
 
 #pragma mark - UITextViewDelegate
 
@@ -362,8 +318,7 @@
 
 - (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception
 {
-    NSString *response = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    //NSLog(@"onGetSR: %@",response);
+    
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
@@ -376,7 +331,7 @@
         NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
         
         NSArray* comments = [[shouts objectAtIndex:0] objectForKey:@"comments"];
-       // NSLog(@"%@", comments[0]);
+       NSLog(@"comment return: %@", jsonDict);
         
         NSDictionary *shout;
         
@@ -384,13 +339,21 @@
             
             shout = [comments objectAtIndex:i];
             STRShout *newShout = [[STRShout alloc] init];
-            newShout.shoutId = [shout objectForKey:@"id"];
-            //newShout.shoutLatitude = [shout objectForKey:@"latitude"];
-            //newShout.shoutLongitude = [shout objectForKey:@"longitude"];
-            newShout.shoutMessage = [shout objectForKey:@"message"];
-            newShout.phoneId = [shout objectForKey:@"userName"];
-            newShout.shoutTime = [shout objectForKey:@"timestamp"];
-            [tempList insertObject:newShout atIndex:0];
+            
+            newShout.shoutUserName = [shout objectForKey:@"userName"];
+            
+            if(![blockedUsers containsObject:newShout.shoutUserName]){
+            
+                newShout.shoutId = [shout objectForKey:@"id"];
+                newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+                newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+                newShout.shoutMessage = [shout objectForKey:@"message"];
+                newShout.shoutTime = [shout objectForKey:@"timestamp"];
+                newShout.likeCount = [[shout objectForKey:@"numLikes"] integerValue];
+                newShout.isLikedByUser = [[shout objectForKey:@"liked"] boolValue];
+                [tempList insertObject:newShout atIndex:0];
+            
+            }
         }
         self.api.shoutList = tempList;
         [self updateList];
@@ -402,8 +365,11 @@
 - (void) onPostCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
 
     NSError *error = nil;
+    
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     NSMutableArray *tempList = [[NSMutableArray alloc] init];
+    
+    NSLog(@"%@",jsonDict);
     
     if (error != nil) {
         NSLog(@"Error parsing JSON.");
@@ -413,35 +379,123 @@
         NSArray* shouts = [jsonDict objectForKey:@"shouts"]; //2
         
         NSArray* comments = [[shouts objectAtIndex:0] objectForKey:@"comments"];
+       
+        
         NSDictionary *shout;
         
-        for (int i=0; i<[shouts count]; i++) {
+        for (int i=0; i<[comments count]; i++) {
             
-            shout = [shouts objectAtIndex:i];
+            shout = [comments objectAtIndex:i];
             STRShout *newShout = [[STRShout alloc] init];
-            newShout.shoutId = [shout objectForKey:@"id"];
-            newShout.shoutLatitude = [shout objectForKey:@"latitude"];
-            newShout.shoutLongitude = [shout objectForKey:@"longitude"];
-            newShout.shoutMessage = [shout objectForKey:@"message"];
-            newShout.phoneId = [shout objectForKey:@"userName"];
-            newShout.shoutTime = [shout objectForKey:@"timestamp"];
-            [tempList insertObject:newShout atIndex:0];
             
+            newShout.shoutUserName = [shout objectForKey:@"userName"];
+            
+            if(![blockedUsers containsObject:newShout.shoutUserName]){
+                
+                newShout.shoutId = [shout objectForKey:@"id"];
+                newShout.shoutLatitude = [shout objectForKey:@"latitude"];
+                newShout.shoutLongitude = [shout objectForKey:@"longitude"];
+                newShout.shoutMessage = [shout objectForKey:@"message"];
+                newShout.shoutTime = [shout objectForKey:@"timestamp"];
+                newShout.likeCount = [[shout objectForKey:@"numLikes"] integerValue];
+                newShout.isLikedByUser = [[shout objectForKey:@"liked"] boolValue];
+                [tempList insertObject:newShout atIndex:0];
+                
+            }
         }
         self.api.shoutList = tempList;
         [self updateList];
+
     }
 
 }
 
 
 - (void) onRegistrationReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception{}
+- (void) onUpdateUserReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{}
+- (void) onUserAuthenticateReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{}
+- (void) onUserBlockReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
+    
+}
+- (void) onUserUnBlockReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{}
 
+- (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{return nil;}
+- (void) onPostShoutReturn:(STRShouterAPI*)api :(NSData*) data :(NSException*)exception{}
+- (void) onShoutLikeReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{}
+- (void) onShoutUnLikeReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{}
+- (void)refreshDisplay:(UITableView *)tableView {
+    [tableView reloadData];
+}
 
 - (void) updateList
 {
     self.commentList = self.api.shoutList;
     [self.tableView reloadData];
+    [self performSelector:(@selector(refreshDisplay:)) withObject:(self.tableView) afterDelay:0.05];
 }
+
+- (void) startUpdatingCurrentLocation
+{
+    
+    if(self.locationManager == nil){
+        NSLog(@"manager was nil");
+        self.locationManager = [[CLLocationManager alloc] init];
+    }
+    
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized){
+        NSLog(@"location services enabled");
+        
+        [self.locationManager startUpdatingLocation];
+    }
+    else if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied){
+        NSLog(@"denied");
+    }
+    else
+        [self.locationManager startUpdatingLocation];
+    
+}
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    [locationManager stopUpdatingLocation];
+    NSLog(@"error%@",error);
+    switch([error code])
+    {
+        case kCLErrorNetwork: // general, network-related error
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"please check your network connection or that you are not in airplane mode" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+            break;
+        case kCLErrorDenied:{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"user has denied to use current Location " delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+            break;
+        default:
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"unknown network error" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+            break;
+    }
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+{
+    
+    CLLocation *currentLocation = newLocation;
+    
+    if (currentLocation != nil) {
+        NSLog(@"latitude %+.6f, longitude %+.6f\n", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
+    }
+    
+    [locationManager stopUpdatingLocation];
+    
+}
+
 
 @end

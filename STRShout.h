@@ -13,6 +13,7 @@
 
 @property NSString *shoutMessage;
 @property NSString *phoneId;
+@property NSString *shoutUserName;
 @property STRUser *shoutPoster;
 @property NSString *shoutLatitude;
 @property NSString *shoutLongitude;
@@ -21,5 +22,6 @@
 @property NSString *shoutTime;
 @property NSUInteger likeCount;
 @property NSUInteger commentCount;
+@property BOOL isLikedByUser;
 
 @end

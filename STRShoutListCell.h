@@ -26,7 +26,7 @@
 @property BOOL deleteOnDragRelease;
 @property (nonatomic) STRShouterAPI *api;
 
-@property UIGestureRecognizer *swipeRecognizer;
+
 
 -(void) initCell;
 

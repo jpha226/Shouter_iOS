@@ -85,7 +85,7 @@
         
         self.userNameField.text = ((STRRegisterViewController*)source).userName;
         self.passWordField.text = ((STRRegisterViewController*)source).password;
-        //[self performSegueWithIdentifier:@"ExitLogIn" sender:self];
+        [self performSegueWithIdentifier:@"ExitLogIn" sender:self];
             
     }
     

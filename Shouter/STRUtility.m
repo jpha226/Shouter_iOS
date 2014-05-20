@@ -12,11 +12,13 @@
 
 @implementation STRUtility
 
+@synthesize locationManager;
+
 // Gets the location for tagging shouts
 + (CLLocation*)getUpToDateLocation
 {
-    
-    CLLocationManager *locationManager;
+    NSLog(@"utility get up to date");
+     CLLocationManager *locationManager;
     // Create the location manager if this object does not
     // already have one.
     if (nil == locationManager)
@@ -63,26 +65,14 @@
     
     STRShout *returnShout = [[STRShout alloc] init];
     returnShout.shoutMessage = message;
-    // Get the location for the shout
-    CLLocation *currentLocation = [STRUtility getUpToDateLocation];
     
-    if (currentLocation == nil) {
-        NSLog(@"nil location");
-        returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",100.0];//38.0373319];
-        returnShout.shoutLongitude = [NSString stringWithFormat:@"%f",100.0];//95.4953778];
-    }
-    else{
-        returnShout.shoutLatitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
-        returnShout.shoutLongitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
+    
     
     // Time stamp the shout
-    NSDate* eventDate = currentLocation.timestamp;
-    returnShout.shoutTime = eventDate.description;
     returnShout.phoneId = @"phoneID";
     returnShout.parentId = @"empty";
     // Assign phone ID / User to the shout
     
-    NSLog(@"latitude: %f, longitude %f", currentLocation.coordinate.latitude, currentLocation.coordinate.longitude);
     
     return returnShout;
 }

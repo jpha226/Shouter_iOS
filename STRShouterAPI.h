@@ -22,8 +22,8 @@
 
 - (void) postShout:(STRShout *)message;
 - (void) registerUser: (NSString*) userName :(NSString*) password :(NSString*) passwordConfirm;
-- (NSMutableArray*) getShout: (NSString*) latitude :(NSString*) longitude;
-- (NSMutableArray*) getComment: (NSString*) parentID;
+- (NSMutableArray*) getShout: (NSString*) userName :(NSString*) latitude :(NSString*) longitude;
+- (NSMutableArray*) getComment: (NSString*) userName :(NSString*) parentID;
 - (void) postComment: (STRShout*) message;
 - (void) likeShout: (NSString*) userName :(NSString*) shoutID;
 - (void) unLikeShout: (NSString*) userName :(NSString*) shoutID;
@@ -38,9 +38,9 @@
 @protocol ShouterAPIDelegate <NSObject>
 - (NSMutableArray*) onGetShoutReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;
 - (void) onPostShoutReturn:(STRShouterAPI*)api :(NSData*) data :(NSException*)exception;
-- (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception;
+- (NSMutableArray*) onGetCommentReturn:(STRShouterAPI*)api :(NSData*)result :(NSException*)exception;
 - (void) onPostCommentReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;
-- (void) onRegistrationReturn:(STRShouterAPI*)api :(NSMutableString*)result :(NSException*)exception;
+- (void) onRegistrationReturn:(STRShouterAPI*)api :(NSData*)result :(NSException*)exception;
 - (void) onShoutLikeReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;
 - (void) onShoutUnLikeReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;
 - (void) onUpdateUserReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception;

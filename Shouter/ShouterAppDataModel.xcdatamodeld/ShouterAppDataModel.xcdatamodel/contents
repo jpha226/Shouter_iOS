@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3401" systemVersion="12F45" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="BlockedUsers" syncable="YES">
+        <attribute name="blockedUserName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="UserNameEntity" representedClassName="UserNameEntity" syncable="YES">
+        <attribute name="deviceUserName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="BlockedUsers" positionX="-63" positionY="-27" width="128" height="58"/>
+        <element name="UserNameEntity" positionX="88" positionY="-72" width="128" height="58"/>
+    </elements>
+</model>

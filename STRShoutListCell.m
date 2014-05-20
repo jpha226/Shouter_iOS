@@ -8,6 +8,7 @@
 
 #import "STRShoutListCell.h"
 #import "STRShouterAPI.h"
+#import "global.h"
 
 @implementation STRShoutListCell
 
@@ -26,11 +27,22 @@
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    
     if (self) {
-       
-        UIGestureRecognizer* recognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-        recognizer.delegate = self;
-        [self addGestureRecognizer:recognizer];
+        
+        
+        
+        
+    }
+    return self;
+}
+
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        
+        //NSLog(@"init with coder");
         
     }
     return self;
@@ -39,7 +51,9 @@
 - (void) initCell{
     
     self.api = [[STRShouterAPI alloc] init];
+    //NSLog(@"init cell");
     [self.api setDelegate:self];
+    
     
 }
 
@@ -54,70 +68,35 @@
 
 - (IBAction)likeButtonPressed:(id)sender {
     
-    [self.api likeShout:@"username" :cellShout.shoutId];
-    NSUInteger count = cellShout.likeCount;
-    count++;
-    likeCountLabel.text = [NSString stringWithFormat:@"%u",count];
-    NSLog(@"like");
+    if(cellShout.isLikedByUser){
+        NSUInteger likeCount = [self.likeCountLabel.text intValue];
+        likeCount = likeCount - 1;
+        self.likeCountLabel.text = [NSString stringWithFormat:@"%d",likeCount];
+        [self.api unLikeShout:applicationUserName :cellShout.shoutId];
+        cellShout.isLikedByUser = NO;
+    }
+    else{
+        NSUInteger likeCount = [self.likeCountLabel.text intValue];
+        likeCount = likeCount + 1;
+        self.likeCountLabel.text = [NSString stringWithFormat:@"%d",likeCount];
+        [self.api likeShout:applicationUserName :cellShout.shoutId];
+        cellShout.isLikedByUser = YES;
+    }
 }
 
-#pragma mark - horizontal pan gesture methods
--(BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer {
-    CGPoint translation = [gestureRecognizer translationInView:[self superview]];
-    // Check for horizontal gesture
-    if (fabsf(translation.x) > fabsf(translation.y)) {
-        return YES;
-    }
-    return NO;
-}
-
--(void)handlePan:(UIPanGestureRecognizer *)recognizer {
-    // 1
-    NSLog(@"handlePan");
-    if (recognizer.state == UIGestureRecognizerStateBegan) {
-        // if the gesture has just started, record the current centre location
-        originalCenter = self.center;
-    }
-    
-    // 2
-    if (recognizer.state == UIGestureRecognizerStateChanged) {
-        // translate the center
-        CGPoint translation = [recognizer translationInView:self];
-        self.center = CGPointMake(originalCenter.x + translation.x, originalCenter.y);
-        // determine whether the item has been dragged far enough to initiate a delete / complete
-        deleteOnDragRelease = self.frame.origin.x < -self.frame.size.width / 2;
-        
-    }
-    
-    // 3
-    if (recognizer.state == UIGestureRecognizerStateEnded) {
-        // the frame this cell would have had before being dragged
-        CGRect originalFrame = CGRectMake(0, self.frame.origin.y,
-                                          self.bounds.size.width, self.bounds.size.height);
-        if (!deleteOnDragRelease) {
-            // if the item is not being deleted, snap back to the original location
-            [UIView animateWithDuration:0.2
-                             animations:^{
-                                 self.frame = originalFrame;
-                             }
-             ];
-        }
-    }
-}
 
 - (void) onShoutLikeReturn:(STRShouterAPI*)api :(NSData*)data :(NSException*)exception{
     
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    NSMutableArray *tempList = [[NSMutableArray alloc] init];
     
     if (error != nil) {
         NSLog(@"Error parsing JSON.");
     }
     else {
-    
-        NSLog(@"on like return");
-        
+       
+        NSString *shout = [jsonDict objectForKey:@"isLiked"];
+        NSLog(@"%@",shout);
     }
     
     
@@ -126,12 +105,16 @@
     
     NSError *error = nil;
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    NSMutableArray *tempList = [[NSMutableArray alloc] init];
     
     if (error != nil) {
         NSLog(@"Error parsing JSON.");
     }
-    else {}
+    else {
+    
+        NSString *shout = [jsonDict objectForKey:@"isLiked"];
+        NSLog(@"%@",shout);
+    
+    }
     
 }
 

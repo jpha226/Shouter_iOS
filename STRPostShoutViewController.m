@@ -10,6 +10,7 @@
 #import "STRShout.h"
 #import <CoreLocation/CoreLocation.h>
 #import "STRUtility.h"
+#import "global.h"
 #define MAX_LENGTH = 141;
 
 @interface STRPostShoutViewController ()
@@ -22,6 +23,8 @@
 
 @implementation STRPostShoutViewController
 
+@synthesize message;
+
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     
@@ -29,35 +32,11 @@
     
     if (self.textView.text.length > 0) { // There is a message typed
         
-        self.createShout = [STRUtility prepareShoutResponse:self.textView.text]; // create shout to return
+        //self.createShout = [STRUtility prepareShoutResponse:self.textView.text]; // create shout to return
+        self.message = self.textView.text;
+        
         
     }
-}
-
-// Deprecated function. Now handled with STRUtility.prepareShoutResponse
-- (void) prepareShoutResponse
-{
-    self.createShout = [[STRShout alloc] init];
-    self.createShout.shoutMessage = self.textView.text;
-    
-    // Get the location for the shout
-    CLLocation *currentLocation = [STRUtility getUpToDateLocation];
-    if (currentLocation == nil) {
-        
-        self.createShout.shoutLatitude = [NSString stringWithFormat:@"%f",69.0];
-        self.createShout.shoutLongitude = [NSString stringWithFormat:@"%f",13.0];
-    }
-    else{
-        self.createShout.shoutLatitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.latitude];
-        self.createShout.shoutLongitude = [NSString stringWithFormat:@"%f",currentLocation.coordinate.longitude];    }
-    
-    // Time stamp the shout
-    NSDate* eventDate = currentLocation.timestamp;
-    self.createShout.shoutTime = eventDate.description;
-    self.createShout.phoneId = @"phoneID";
-    self.createShout.parentId = @"empty";
-    // Assign phone ID / User to the shout
-    
 }
 
 

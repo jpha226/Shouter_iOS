@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B03462D01905FD1700C3B7BC /* STRAddCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */; };
 		B03462D21908B68400C3B7BC /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03462D11908B68400C3B7BC /* QuartzCore.framework */; };
 		B03462D41908CC8000C3B7BC /* ShoutListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B03462D31908CC8000C3B7BC /* ShoutListCell.xib */; };
 		B0A1169E18C907C800902F31 /* STRLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0A1169D18C907C800902F31 /* STRLogInViewController.m */; };
@@ -18,6 +17,13 @@
 		B0D6E77A18C973BF00371089 /* STRShoutListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D6E77918C973BF00371089 /* STRShoutListCell.m */; };
 		B0D6E77F18CA36A100371089 /* STRRegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D6E77E18CA36A100371089 /* STRRegisterViewController.m */; };
 		B0D8507918CD3FE80085E825 /* STRCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D8507818CD3FE80085E825 /* STRCommentCell.m */; };
+		B0E3CBD6190EDA4000FFE237 /* 08-chat.png in Resources */ = {isa = PBXBuildFile; fileRef = B0E3CBD5190EDA4000FFE237 /* 08-chat.png */; };
+		B0E3CBD8190EDA5200FFE237 /* 28-star.png in Resources */ = {isa = PBXBuildFile; fileRef = B0E3CBD7190EDA5200FFE237 /* 28-star.png */; };
+		B0E3CBDA190FED1A00FFE237 /* ic_action_star.png in Resources */ = {isa = PBXBuildFile; fileRef = B0E3CBD9190FED1A00FFE237 /* ic_action_star.png */; };
+		B0E3CBDD191330F400FFE237 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0E3CBDC191330F400FFE237 /* CoreData.framework */; };
+		B0E3CBE0191331B000FFE237 /* ShouterAppDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B0E3CBDE191331B000FFE237 /* ShouterAppDataModel.xcdatamodeld */; };
+		B0E3CBE31915AA6F00FFE237 /* UserNameEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = B0E3CBE21915AA6F00FFE237 /* UserNameEntity.m */; };
+		B0E3CBE5191D3E4600FFE237 /* shouter1small.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B0E3CBE4191D3E4600FFE237 /* shouter1small.jpg */; };
 		D77E32861891C89600A387E4 /* STRUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = D77E32851891C89600A387E4 /* STRUtility.m */; };
 		D7A68EF6188FEEB0006C0D8C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF5188FEEB0006C0D8C /* Foundation.framework */; };
 		D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7A68EF7188FEEB0006C0D8C /* CoreGraphics.framework */; };
@@ -49,8 +55,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B03462CE1905FD1700C3B7BC /* STRAddCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRAddCommentCell.h; sourceTree = "<group>"; };
-		B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRAddCommentCell.m; sourceTree = "<group>"; };
 		B03462D11908B68400C3B7BC /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B03462D31908CC8000C3B7BC /* ShoutListCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ShoutListCell.xib; sourceTree = "<group>"; };
 		B0A1169C18C907C800902F31 /* STRLogInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRLogInViewController.h; sourceTree = "<group>"; };
@@ -67,6 +71,15 @@
 		B0D6E77E18CA36A100371089 /* STRRegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRRegisterViewController.m; sourceTree = "<group>"; };
 		B0D8507718CD3FE80085E825 /* STRCommentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRCommentCell.h; sourceTree = "<group>"; };
 		B0D8507818CD3FE80085E825 /* STRCommentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRCommentCell.m; sourceTree = "<group>"; };
+		B0E3CBD5190EDA4000FFE237 /* 08-chat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "08-chat.png"; sourceTree = "<group>"; };
+		B0E3CBD7190EDA5200FFE237 /* 28-star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "28-star.png"; sourceTree = "<group>"; };
+		B0E3CBD9190FED1A00FFE237 /* ic_action_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_action_star.png; sourceTree = "<group>"; };
+		B0E3CBDB19100F4700FFE237 /* global.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
+		B0E3CBDC191330F400FFE237 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		B0E3CBDF191331B000FFE237 /* ShouterAppDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShouterAppDataModel.xcdatamodel; sourceTree = "<group>"; };
+		B0E3CBE11915AA6F00FFE237 /* UserNameEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserNameEntity.h; sourceTree = "<group>"; };
+		B0E3CBE21915AA6F00FFE237 /* UserNameEntity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserNameEntity.m; sourceTree = "<group>"; };
+		B0E3CBE4191D3E4600FFE237 /* shouter1small.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = shouter1small.jpg; path = ../../Downloads/shouter1small.jpg; sourceTree = "<group>"; };
 		D77E32841891C89600A387E4 /* STRUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STRUtility.h; sourceTree = "<group>"; };
 		D77E32851891C89600A387E4 /* STRUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STRUtility.m; sourceTree = "<group>"; };
 		D7A68EF2188FEEB0006C0D8C /* Shouter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Shouter.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,6 +114,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0E3CBDD191330F400FFE237 /* CoreData.framework in Frameworks */,
 				B03462D21908B68400C3B7BC /* QuartzCore.framework in Frameworks */,
 				B0A3A1FA18ADBC0100C86786 /* CoreLocation.framework in Frameworks */,
 				D7A68EF8188FEEB0006C0D8C /* CoreGraphics.framework in Frameworks */,
@@ -133,8 +147,6 @@
 				D7A68F2E18903905006C0D8C /* STRPostShoutViewController.h */,
 				D7A68F2F18903905006C0D8C /* STRPostShoutViewController.m */,
 				D7A68F26188FEF68006C0D8C /* Main.storyboard */,
-				B03462CE1905FD1700C3B7BC /* STRAddCommentCell.h */,
-				B03462CF1905FD1700C3B7BC /* STRAddCommentCell.m */,
 				B0D8507718CD3FE80085E825 /* STRCommentCell.h */,
 				B0D8507818CD3FE80085E825 /* STRCommentCell.m */,
 				B0D6E77D18CA36A100371089 /* STRRegisterViewController.h */,
@@ -147,6 +159,7 @@
 				B0A3A1EA189730D000C86786 /* STRShouterAPI.m */,
 				D7A68F2B18902FAF006C0D8C /* STRShoutListViewController.h */,
 				D7A68F2C18902FAF006C0D8C /* STRShoutListViewController.m */,
+				B0E3CBDB19100F4700FFE237 /* global.h */,
 				B0A3A1EC18A97A8300C86786 /* STRUser.h */,
 				B0A3A1ED18A97A8400C86786 /* STRUser.m */,
 				D7A68EFB188FEEB0006C0D8C /* Shouter */,
@@ -168,6 +181,7 @@
 		D7A68EF4188FEEB0006C0D8C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0E3CBDC191330F400FFE237 /* CoreData.framework */,
 				B03462D11908B68400C3B7BC /* QuartzCore.framework */,
 				B0A3A1F918ADBC0100C86786 /* CoreLocation.framework */,
 				D7A68EF5188FEEB0006C0D8C /* Foundation.framework */,
@@ -185,6 +199,9 @@
 				D7A68F05188FEEB0006C0D8C /* STRAppDelegate.m */,
 				D7A68F07188FEEB0006C0D8C /* Images.xcassets */,
 				D7A68EFC188FEEB0006C0D8C /* Supporting Files */,
+				B0E3CBDE191331B000FFE237 /* ShouterAppDataModel.xcdatamodeld */,
+				B0E3CBE11915AA6F00FFE237 /* UserNameEntity.h */,
+				B0E3CBE21915AA6F00FFE237 /* UserNameEntity.m */,
 			);
 			path = Shouter;
 			sourceTree = "<group>";
@@ -192,6 +209,10 @@
 		D7A68EFC188FEEB0006C0D8C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B0E3CBE4191D3E4600FFE237 /* shouter1small.jpg */,
+				B0E3CBD9190FED1A00FFE237 /* ic_action_star.png */,
+				B0E3CBD7190EDA5200FFE237 /* 28-star.png */,
+				B0E3CBD5190EDA4000FFE237 /* 08-chat.png */,
 				B0A3A1F118A9923000C86786 /* ic_launcher.png */,
 				D77E32841891C89600A387E4 /* STRUtility.h */,
 				D77E32851891C89600A387E4 /* STRUtility.m */,
@@ -269,6 +290,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Shouter;
 				TargetAttributes = {
+					D7A68EF1188FEEB0006C0D8C = {
+						DevelopmentTeam = DAS3D379T6;
+					};
 					D7A68F0C188FEEB0006C0D8C = {
 						TestTargetID = D7A68EF1188FEEB0006C0D8C;
 					};
@@ -297,11 +321,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0E3CBD8190EDA5200FFE237 /* 28-star.png in Resources */,
+				B0E3CBE5191D3E4600FFE237 /* shouter1small.jpg in Resources */,
 				B03462D41908CC8000C3B7BC /* ShoutListCell.xib in Resources */,
 				D7A68F27188FEF68006C0D8C /* Main.storyboard in Resources */,
 				D7A68F00188FEEB0006C0D8C /* InfoPlist.strings in Resources */,
+				B0E3CBD6190EDA4000FFE237 /* 08-chat.png in Resources */,
 				D7A68F08188FEEB0006C0D8C /* Images.xcassets in Resources */,
 				B0A3A1F218A9923000C86786 /* ic_launcher.png in Resources */,
+				B0E3CBDA190FED1A00FFE237 /* ic_action_star.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,16 +349,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7A68F3018903905006C0D8C /* STRPostShoutViewController.m in Sources */,
+				B0E3CBE31915AA6F00FFE237 /* UserNameEntity.m in Sources */,
 				B0D8507918CD3FE80085E825 /* STRCommentCell.m in Sources */,
 				D7A68F06188FEEB0006C0D8C /* STRAppDelegate.m in Sources */,
 				B0A1169E18C907C800902F31 /* STRLogInViewController.m in Sources */,
 				B0D6E77F18CA36A100371089 /* STRRegisterViewController.m in Sources */,
-				B03462D01905FD1700C3B7BC /* STRAddCommentCell.m in Sources */,
 				B0D6E77A18C973BF00371089 /* STRShoutListCell.m in Sources */,
 				D77E32861891C89600A387E4 /* STRUtility.m in Sources */,
 				D7E464AD18916DE900C19B9D /* STRCommentViewController.m in Sources */,
 				D7A68F33189080D6006C0D8C /* STRShout.m in Sources */,
 				D7A68F2D18902FAF006C0D8C /* STRShoutListViewController.m in Sources */,
+				B0E3CBE0191331B000FFE237 /* ShouterAppDataModel.xcdatamodeld in Sources */,
 				B0A3A1EE18A97A8400C86786 /* STRUser.m in Sources */,
 				D7A68F02188FEEB0006C0D8C /* main.m in Sources */,
 				B0A3A1EB189730D000C86786 /* STRShouterAPI.m in Sources */,
@@ -392,7 +421,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development IOS Push Services: com.shouter.Shouter";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -411,6 +441,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -452,10 +483,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Shouter/Shouter-Prefix.pch";
 				INFOPLIST_FILE = "Shouter/Shouter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -465,10 +499,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Shouter/Shouter-Prefix.pch";
 				INFOPLIST_FILE = "Shouter/Shouter-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -546,6 +583,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		B0E3CBDE191331B000FFE237 /* ShouterAppDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				B0E3CBDF191331B000FFE237 /* ShouterAppDataModel.xcdatamodel */,
+			);
+			currentVersion = B0E3CBDF191331B000FFE237 /* ShouterAppDataModel.xcdatamodel */;
+			path = ShouterAppDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D7A68EEA188FEEB0006C0D8C /* Project object */;
 }

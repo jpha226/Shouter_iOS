@@ -14,11 +14,18 @@
 @interface STRShoutListViewController : UITableViewController <ShouterAPIDelegate, CLLocationManagerDelegate>
 
 @property NSMutableArray *shoutList;
+@property NSMutableSet *blockedUsers; // Deprecated for global userBlockedUsers
 @property CLLocationManager *locationManager;
 @property (nonatomic) STRShouterAPI *api;
 @property (nonatomic) BOOL isLoggedIn;
-@property NSString* userName;
 @property NSString* passWord;
+@property NSString* docPath;
+@property (nonatomic,strong) NSManagedObjectContext* managedObjectContext;
+@property BOOL didReturnFromCommentView;
+@property UIImage *backgroundImage;
+@property UIImageView *viewBackGroundImage;
+@property UIActivityIndicatorView *indicator;
+
 
 - (void) updateList;
 
